@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "9a6dd1ba-7b5e-45b6-a9ab-35f04f16c1e3",
+		"name": "TP5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ListEventos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/event/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"event",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SerchEvento",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/event/?name=taylor&category=Musica&startdate=2024-03-03&tag=Rock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"event",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "taylor"
+						},
+						{
+							"key": "category",
+							"value": "Musica"
+						},
+						{
+							"key": "startdate",
+							"value": "2024-03-03"
+						},
+						{
+							"key": "tag",
+							"value": "Rock"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DetalleEvento",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/event/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"event",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
