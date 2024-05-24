@@ -1,4 +1,4 @@
-class Province {
+class Province{
     id;
     name;
     full_name;
