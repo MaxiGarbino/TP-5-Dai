@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import config from './src/configs/db-config.js';
 import pkg from 'pg';
-import aux from './src/entities/province.js' 
+/*import aux from './src/entities/province.js' */
 /*import ProvinceRouter from './src/controllers/province-controller.js';*/
 const { Client } = pkg
 
