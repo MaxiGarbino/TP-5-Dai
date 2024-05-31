@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import { config } from './src/configs/db-config.js';
+import config from './src/configs/db-config.js';
 import pkg from 'pg';
-import ProvinceRouter from './src/controllers/province-controller.js';
-const { Client } = require('pg')
+import aux from './src/entities/province.js' 
+/*import ProvinceRouter from './src/controllers/province-controller.js';*/
+const { Client } = pkg
 
 const app = express();
 const port = 3000;
@@ -11,7 +12,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/province', ProvinceRouter);
+/*app.use('/api/province', ProvinceRouter);*/
 
 const client = new Client(config);
 await client.connect();
@@ -21,6 +22,6 @@ let result = await client.query(sql)
 await client.end();
 console.log(result.rows);
 
-app.listen(port, () => {
+/*app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);
-});
+});*/

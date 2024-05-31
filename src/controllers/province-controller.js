@@ -1,5 +1,4 @@
-import { Router } from 'express';
-import { StatusCodes } from 'http-status-codes';
+/* import { Router } from 'express';
 import { provincias } from '../entities/province.js';
 import ProvinceRepository from '../repositories/province-repository.js';
 import ProvinceService from '../services/province-service.js'
@@ -38,4 +37,4 @@ router.put('', async(req, res) => {
     res.status(resArray[1]).send(resArray[0]);
 });
 
-export default router;
+export default router;*/
