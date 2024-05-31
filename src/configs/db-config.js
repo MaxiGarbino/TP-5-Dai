@@ -6,5 +6,6 @@ const DBconfig = {
     password : process.env.DB_PASSWORD?? '',
     port : process.env.DB_PORT ?? 5432
 }
+
 export default DBconfig;
     

@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { provincias } from '../entities/province.js';
+import provincias from '../entities/province.js';
 import ProvinceRepository from '../repositories/province-repository.js';
 import ProvinceService from '../services/province-service.js'
 

@@ -1,6 +1,6 @@
 import pkg from 'pg'
 const { Client, Pool } = pkg;
-import { provincias } from '../entities/province.js';
+import provincias from '../entities/province.js';
 export default class ProvinceRepository {
     getAllAsync = async () => {
     let returnArray = provincias;

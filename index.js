@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { config } from './src/configs/db-config.js';
+import  config  from './src/configs/db-config.js';
 import pkg from 'pg';
 import ProvinceRouter from './src/controllers/province-controller.js';
 const { Client } = require('pg')
