@@ -4,16 +4,15 @@ import config from './src/configs/db-config.js';
 import pkg from 'pg';
 /*import aux from './src/entities/province.js' */
 import ProvinceRouter from './src/controllers/province-controller.js';
-const { Client } = pkg
+import EventRouter from './src/controllers/event-controller.js';
 
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => res.send("Hola"));
-
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/event', EventRouter);
 app.use('/api/province', ProvinceRouter);
 /*
 const client = new Client(config);
