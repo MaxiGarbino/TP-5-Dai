@@ -6,6 +6,8 @@ import ProvinceService from '../services/province-service.js'
 const router = Router();
 const svc = new ProvinceService();
 
+
+
 router.get('', async(req, res) => {
     const resArray = await svc.getAllAsync();
     res.status(resArray[1]).send(resArray[0]);
