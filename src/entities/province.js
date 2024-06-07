@@ -1,15 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import config from '../configs/db-config.js';
-import pkg from 'pg';
-const { Client } = pkg
 
+class Province {
+    id;
+    name;
+    full_name;
+    latitude;
+    logitude;
+    display_order;
+}
 
-const client = new Client(config);
-await client.connect();
-
-let sql = `SELECT * from provinces`;
-let result = await client.query(sql)
-await client.end();
-const provincias = result.rows;
-export default provincias;
+export default Province;

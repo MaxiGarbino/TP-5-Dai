@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import provincias from '../entities/province.js';
 import ProvinceRepository from '../repositories/province-repository.js';
 import ProvinceService from '../services/province-service.js'
 

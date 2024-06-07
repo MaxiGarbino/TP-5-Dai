@@ -9,7 +9,7 @@ const { Client } = pkg
 const client = new Client(config);
 await client.connect();
 
-let sql = `SELECT * from event`;
+let sql = `SELECT * from events`;
 let result = await client.query(sql)
 await client.end();
 const eventos = result.rows;

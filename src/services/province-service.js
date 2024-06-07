@@ -32,7 +32,7 @@ export default class ProvinceService{
     }
     putAsync= async (body) => 
     {
-        const repo = new ProvinceRepository();
+        const repo = new ProvinceRepository(); 
         let resArray = repo.putAsync(body)
         return resArray;
     }
