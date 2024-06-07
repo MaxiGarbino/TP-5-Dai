@@ -10,4 +10,10 @@ router.get('', async(req, res) => {
     res.status(resArray[1]).send(resArray[0]);
 });
 
+router.get('/search', async (req, res) => {
+    const params = req.query;
+    const resArray = await svc.searchAsync(params);
+    res.status(resArray[1]).send(resArray[0]);
+});
+
 export default router;

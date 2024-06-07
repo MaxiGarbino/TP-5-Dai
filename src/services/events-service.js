@@ -10,8 +10,20 @@ export default class EventService{
         else{
             resArray = ["No se encuentran eventos", 404]
         }
-        return resArray;
-     
+        return resArray; 
     }
+
+    searchAsync = async (params) => {
+        const repo = new EventRepository();
+        const arrayEventos = await repo.searchAsync(params);
+        let resArray;
+        if (arrayEventos != '') {
+            resArray = [arrayEventos, 200];
+        } else {
+            resArray = ["No se encuentran eventos", 404];
+        }
+        return resArray;
+    }
+    
        
 }

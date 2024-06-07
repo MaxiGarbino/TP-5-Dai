@@ -1,39 +1,34 @@
 {
 	"info": {
-		"_postman_id": "0d27ab83-559a-4f5f-96bb-04d6a2144ccb",
+		"_postman_id": "60a6e32c-9396-45bf-bd82-844cbf8fd6d9",
 		"name": "TP05",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "2 - Todos los eventos",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
 		{
 			"name": "3 - Busqueda de un evento",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "/api/event/?name={texto}&category={texto}&startdate={fecha YYYY-MM-DD}&tag={texto}",
+					"raw": "http://localhost:3000/api/event/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
 					"path": [
 						"api",
 						"event",
 						""
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": "{texto}"
-						},
-						{
-							"key": "category",
-							"value": "{texto}"
-						},
-						{
-							"key": "startdate",
-							"value": "{fecha YYYY-MM-DD}"
-						},
-						{
-							"key": "tag",
-							"value": "{texto}"
-						}
 					]
 				}
 			},
@@ -45,7 +40,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/event/{id}",
+					"raw": "http://localhost:3000/api/event/search",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -54,7 +49,7 @@
 					"path": [
 						"api",
 						"event",
-						"{id}"
+						"search"
 					]
 				}
 			},
