@@ -58,7 +58,10 @@ export default class EventRepository {
         } finally {
             await client.end();
         }
+    
     }
+
+
         getByIdAsync = async (id) => {
             const client = new Client(config);
             await client.connect();
@@ -69,6 +72,51 @@ export default class EventRepository {
             const evento = result.rows;
             return evento
         }
+
+
+        searchEnrollments = async (eventId, params) => {
+            const client = new Client(config);
+            await client.connect();
+        
+            try {
+                let sql = `SELECT u.* FROM users as u INNER JOIN event_enrollments as e ON u.id = e.id_user INNER JOIN events as ev on e.id_event = ev. id WHERE ev.id = $1`;
+                const values = [eventId];
+        
+                if (params != null) {
+                    if (params.first_name !== undefined) {
+                        sql += ` AND u.first_name ILIKE $${values.length + 1}`;
+                        values.push(`%${params.first_name}%`);
+                    }
+        
+                    if (params.last_name !== undefined) {
+                        sql += ` AND u.last_name ILIKE $${values.length + 1}`;
+                        values.push(`%${params.last_name}%`);
+                    }
+        
+                    if (params.username !== undefined) {
+                        sql += ` AND u.username ILIKE $${values.length + 1}`;
+                        values.push(`%${params.username}%`);
+                    }
+        
+                    if (params.attended !== undefined) {
+                        sql += ` AND e.attended = $${values.length + 1}`;
+                        values.push(params.attended);
+                    }
+        
+                    if (params.rating !== undefined) {
+                        sql += ` AND e.rating >= $${values.length + 1}`;
+                        values.push(params.rating);
+                    }
+                }
+        
+                const result = await client.query(sql, values);
+                return result.rows;
+            } finally {
+                await client.end();
+            }
+        };
+        
+
 
     //     const client = new Client(config);
     //     await client.connect();
