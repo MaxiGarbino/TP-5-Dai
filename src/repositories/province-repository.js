@@ -43,34 +43,36 @@ export default class ProvinceRepository {
         }
     }
     putAsync = async (body) => {
-        
-        let resArray;
-        let sql1 = `SELECT id from provinces WHERE id=$1`;
-        const valuesID = [parseInt(body.id)];
-        let resultID = await client.query(sql1, valuesID)
-        let sql2 = `UPDATE provinces
-        Set name = $1
-            full_name = $2
-            latitude = $3
-            longitude = $4
-            display_order = $5 
-            WHERE id = $6
-        `
-        const values = [body.name, body.full_name, body.latitude, body.longitude, body.display_order, resultID];
-        let result = await client.query(sql2, values)
-        if( body.name="" || body.name.length <= 3)
-        {
-            resArray = ["No cumple con las reglas de negocio",400]
+        try {
+            const sql1 = `SELECT id from provinces WHERE id=$1`;
+            const valuesID = [parseInt(body.id)];
+            const resultID = await client.query(sql1, valuesID);
+    
+            if (resultID.rows.length === 0) {
+                return ["Provincia no encontrada", 404];
+            }
+    
+            const sql2 = `UPDATE provinces
+                          SET name = $1,
+                              full_name = $2,
+                              latitude = $3,
+                              longitude = $4,
+                              display_order = $5
+                          WHERE id = $6`;
+    
+            const values = [body.name, body.full_name, body.latitude, body.longitude, body.display_order, body.id];
+            const result = await client.query(sql2, values);
+    
+            if (body.name === "" || body.name.length <= 3) {
+                return ["No cumple con las reglas de negocio", 400];
+            }
+    
+            return ["Update", 200];
+        } catch (error) {
+            return [error.message, 400];
         }
-        else if(resultID < 1){
-            resArray = ["Provincia no encontrada",404]
-        }
-        else
-        {
-            resArray = ["Update",201]
-            
-        }
-        return resArray;
+    }
+    
         
         /*let resArray = "";
         const createPutAsync = body.id;
@@ -98,7 +100,38 @@ export default class ProvinceRepository {
             resArray = ["Provincia no encontrada",404]
         }
         return resArray;*/
-    }
+        putAsync = async (body) => {
+            try {
+                const sql1 = `SELECT id from provinces WHERE id=$1`;
+                const valuesID = [parseInt(body.id)];
+                const resultID = await client.query(sql1, valuesID);
+        
+                if (resultID.rows.length === 0) {
+                    return ["Provincia no encontrada", 404];
+                }
+        
+                const sql2 = `UPDATE provinces
+                              SET name = $1,
+                                  full_name = $2,
+                                  latitude = $3,
+                                  longitude = $4,
+                                  display_order = $5
+                              WHERE id = $6`;
+        
+                const values = [body.name, body.full_name, body.latitude, body.longitude, body.display_order, body.id];
+                const result = await client.query(sql2, values);
+        
+                if (body.name === "" || body.name.length <= 3) {
+                    return ["No cumple con las reglas de negocio", 400];
+                }
+        
+                return ["Update", 200];
+            } catch (error) {
+                return [error.message, 400];
+            }
+        }
+        
+   
     deleateAsync = async (id) => {
         let resArray;
         const valuesID = [parseInt(id)];
@@ -115,10 +148,9 @@ export default class ProvinceRepository {
         }
         
         return resArray;
-    }
+    } }
     /*
     getByIdAsync = async (id) => {...}
     createAsync = async (entity) => {...}
     updateAsync = async (entity) => {...}
     deleteByIdAsync = async (id) => {...}*/
-}
