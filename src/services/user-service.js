@@ -5,4 +5,9 @@ createAsync = async (body) => {
     let resArray = repo.createAsync(body);
     return resArray;
 }
+logAsync = async (body) => {
+    const repo = new UserRepository();
+    let resArray = repo.logAsync(body);
+    return resArray;
+}
 }
