@@ -18,6 +18,13 @@ router.get('/:id', async(req, res) => {
     
 });
 
+router.get('/:id/enrollment', async(req, res) => {
+    const params = req.query;
+    const resArray = await svc.getByIdAsync(params);
+    res.status(resArray[1]).send(resArray[0]);
+    
+});
+
 // router.get('/search', async (req, res) => {
 //     const params = req.query;
 //     const resArray = await svc.searchAsync(params);
