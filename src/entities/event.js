@@ -5,8 +5,6 @@ import pkg from 'pg';
 const { Client } = pkg
 
 /*SELECT e.id,e.name,e.description,ec.*,el.*,e.start_date from events e inner join event_categories ec on e.id_event_category = ec.id inner join event_locations el on e.id_event_location = el.id*/
-<<<<<<< HEAD
-=======
 
 const client = new Client(config);
 await client.connect();
@@ -16,4 +14,3 @@ let result = await client.query(sql)
 await client.end();
 const eventos = result.rows;
 export default eventos;
->>>>>>> 69b1500162391411a7c87213bbbbb0659ffbc151

@@ -5,6 +5,9 @@ import pkg from 'pg';
 /*import aux from './src/entities/province.js' */
 import ProvinceRouter from './src/controllers/province-controller.js';
 import EventRouter from './src/controllers/event-controller.js';
+import EventLocationRouter from './src/controllers/event-location-controller.js';
+import LocationRouter from './src/controllers/location-controller.js';
+import UserRouter from './src/controllers/location-controller.js';
 
 const app = express();
 const port = 3000;
@@ -14,15 +17,10 @@ app.use(express.json());
 
 app.use('/api/event', EventRouter);
 app.use('/api/province', ProvinceRouter);
-/*
-const client = new Client(config);
-await client.connect();
+app.use('/api/event-location', EventLocationRouter);
+app.use('/api/location', LocationRouter);
+app.use('/api/user', UserRouter);
 
-let sql = `SELECT * from provinces`;
-let result = await client.query(sql)
-await client.end();
-console.log(result.rows);
-*/
 app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);
 });
