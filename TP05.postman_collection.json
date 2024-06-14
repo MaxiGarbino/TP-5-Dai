@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "66065898-c6ed-456c-9948-91cbbb13b3b2",
-		"name": "TP05",
+		"_postman_id": "c36aa4ba-6999-4085-86d7-31164067e328",
+		"name": "TP05 Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -124,12 +124,12 @@
 			"name": "events",
 			"item": [
 				{
-					"name": "4 - Detalle evento",
+					"name": "2 - Todos los eventos",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/{id}",
+							"raw": "http://localhost:3000/api/event/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -138,7 +138,7 @@
 							"path": [
 								"api",
 								"event",
-								"{id}"
+								""
 							]
 						}
 					},
@@ -150,29 +150,42 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "/api/event/?name={texto}&category={texto}&startdate={fecha YYYY-MM-DD}&tag={texto}",
+							"raw": "http://localhost:3000/api/event?name=Concert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
 							"path": [
 								"api",
-								"event",
-								""
+								"event"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "{texto}"
-								},
-								{
-									"key": "category",
-									"value": "{texto}"
-								},
-								{
-									"key": "startdate",
-									"value": "{fecha YYYY-MM-DD}"
-								},
-								{
-									"key": "tag",
-									"value": "{texto}"
+									"value": "Concert"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 - Detalle evento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"1"
 							]
 						}
 					},
@@ -184,7 +197,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/{id}/enrollment?first_name={texto}&last_name={texto}&username={texto}&attended={boolean}&rating={entero}",
+							"raw": "http://localhost:3000/api/event/1/enrollment?attended=True&username=jsmith",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -193,29 +206,17 @@
 							"path": [
 								"api",
 								"event",
-								"{id}",
+								"1",
 								"enrollment"
 							],
 							"query": [
 								{
-									"key": "first_name",
-									"value": "{texto}"
-								},
-								{
-									"key": "last_name",
-									"value": "{texto}"
+									"key": "attended",
+									"value": "True"
 								},
 								{
 									"key": "username",
-									"value": "{texto}"
-								},
-								{
-									"key": "attended",
-									"value": "{boolean}"
-								},
-								{
-									"key": "rating",
-									"value": "{entero}"
+									"value": "jsmith"
 								}
 							]
 						}
