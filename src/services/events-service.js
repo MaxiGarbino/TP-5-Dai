@@ -37,7 +37,19 @@ export default class EventService{
             resArray = ["Evento no encontrado",404];
         }
         return resArray;
-    
-       
     }
+
+    searchEnrollments = async (eventId, params) => {
+        const repo = new EventRepository();
+            const enrollments = await repo.searchEnrollments(eventId, params);
+            let resArray;
+            if (enrollments != '') {
+            
+                resArray = [enrollments,200];;
+            } else {
+                resArray = ["Participante no encontrado",404];
+            }
+            return resArray;
+
+    };
 }
