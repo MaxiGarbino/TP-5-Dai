@@ -4,19 +4,20 @@ import config from '../configs/db-config.js';
 
 export default class EventRepository {
 
-    async getAllAsync() {
-        const client = new Client(config);
-        await client.connect();
+    // async getAllAsync() {
+    //     const client = new Client(config);
+    //     await client.connect();
 
-        try {
-            const sql = `SELECT * FROM events`;
-            const result = await client.query(sql);
-            return result.rows;
-        } finally {
-            await client.end();
-        }
-    }
+    //     try {
+    //         const sql = `SELECT * FROM events`;
+    //         const result = await client.query(sql);
+    //         return result.rows;
+    //     } finally {
+    //         await client.end();
+    //     }
+    // }
 
+    
     searchAsync = async (params) => {
         const client = new Client(config);
         await client.connect();
@@ -37,9 +38,10 @@ export default class EventRepository {
                 values.push(`%${params.category}%`);
             }   
 
-            if (params.startDate) {
-                conditions.push(`e.start_date::date = $${values.length + 1}`);
-                values.push(params.startDate);
+            if (params.startdate) {
+                conditions.push(`e.start_date = $${values.length + 1}`);
+                values.push(params.startdate);
+                
             }
 
             if (params.tag) { 
@@ -56,6 +58,17 @@ export default class EventRepository {
         } finally {
             await client.end();
         }
+    }
+        getByIdAsync = async (id) => {
+            const client = new Client(config);
+            await client.connect();
+    
+            let sql = `SELECT * from events WHERE id=$1`;
+            const values = [id];
+            let result = await client.query(sql, values)
+            const evento = result.rows;
+            return evento
+        }
 
     //     const client = new Client(config);
     //     await client.connect();
@@ -70,5 +83,5 @@ export default class EventRepository {
     // }
 
     
-}
+
 }
