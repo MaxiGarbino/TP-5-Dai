@@ -12,6 +12,11 @@ export default class UserRepository {
       let last_name = body.last_name;
       let username = body.username;
       let password = body.password;
+      
+      const sql = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
+      const result = await client.query(sql, values);
+      let id = result.rows[0];
+      
 
       function validarEmail(username) {
         // Expresión regular para validar un correo electrónico
@@ -32,11 +37,11 @@ export default class UserRepository {
             return ["Contraseña vacio o con pocos caracteres", 400];
           } else {
             const sql = `
-            INSERT INTO users
-                (first_name, last_name, username, password)
+            INSERT INTO public.users
+                (id,first_name, last_name, username, password)
             VALUES
-                ($1,$2,$3,$4)`;
-            const values = [first_name, last_name, username, password];
+                ($1,$2,$3,$4,$5)`;
+            const values = [id,first_name, last_name, username, password];
             const result = await client.query(sql, values);
             return ["created", 200];
           }
@@ -53,39 +58,41 @@ export default class UserRepository {
       return regex.test(username);
     }
     
-    let usuario = body.username;
-    let contraseña = body.password;
+    let username = body.username;
+    let password = body.password;
     
-    if (validarEmail(usuario)) {
-      const sql = `SELECT * FROM users WHERE username = $1 AND password = $2`;
-      const values = [usuario, contraseña];
-      
-      try {
-        const result = await client.query(sql, values);
-        const usuarioDevuelto = result.rows[0]; // Obtenemos el primer resultado de la consulta
-  
-        if (usuarioDevuelto && usuarioDevuelto.username === usuario && usuarioDevuelto.password === contraseña) {
-          const payload = {
-            id: usuarioDevuelto.id,
-            username: usuarioDevuelto.username,
-          };
-          const secretKey = "ClaveSecreta3000$";
-          const options = {
-            expiresIn: "2h",
-            issuer: "miOrganizacion",
-          };
-          const token = jwt.sign(payload, secretKey, options);
-          return [{ success: true, message: "", token: token }, 200];
-        } else {
-          return [{ success: false, message: "Usuario o clave inválida", token: "" }, 401];
-        }
-      } catch (error) {
-        console.error("Error al ejecutar la consulta SQL:", error);
-        return [{ success: false, message: "Error en la base de datos", token: "" }, 500];
-      }
-    } else {
+    if (!validarEmail(username)) {
       return [{ success: false, message: "El email es inválido", token: "" }, 400];
     }
+
+    
+    const sql = `SELECT * FROM public.users WHERE username = $1 AND password = $2 `;
+    const values = [username, password];
+    
+    try {
+      const result = await client.query(sql, values);
+      const usuarioDevuelto = result.rows[0]; // Obtenemos el primer resultado de la consulta
+  
+      if (usuarioDevuelto) {
+        const payload = {
+          id: usuarioDevuelto.id,
+          username: usuarioDevuelto.username,
+        };
+        const secretKey = "ClaveSecreta3000$";
+        const options = {
+          expiresIn: "2h",
+          issuer: "miOrganizacion",
+        };
+        const token = jwt.sign(payload, secretKey, options);
+        return [{ success: true, message: "", token: token }, 200];
+      } else {
+        return [{ success: false, message: "Usuario o clave inválida", token: "" }, 401];
+      }
+    } catch (error) {
+      console.error("Error al ejecutar la consulta SQL:", error);
+      return [{ success: false, message: "Error en la base de datos", token: "" }, 500];
+    }
   };
+  
   
 }
