@@ -5,8 +5,8 @@ const { Client } = pkg;
 const client = new Client(config);
 
 await client.connect();
-let token = '';
-export {token};
+let token = "";
+export { token };
 export class UserRepository {
   createAsync = async (body) => {
     try {
@@ -42,8 +42,8 @@ export class UserRepository {
                 (id,first_name, last_name, username, password)
             VALUES
                 ($1,$2,$3,$4,$5)`;
-            const values = [id,first_name, last_name, username, password];
-            const result = await client.query(sql,values);
+            const values = [id, first_name, last_name, username, password];
+            const result = await client.query(sql, values);
             return ["created", 200];
           }
         }
@@ -58,22 +58,24 @@ export class UserRepository {
       const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return regex.test(username);
     }
-    
+
     let username = body.username;
     let password = body.password;
-    
+
     if (!validarEmail(username)) {
-      return [{ success: false, message: "El email es inválido", token: "" }, 400];
+      return [
+        { success: false, message: "El email es inválido", token: "" },
+        400,
+      ];
     }
 
-    
     const sql = `SELECT * FROM public.users WHERE username = $1 AND password = $2 `;
     const values = [username, password];
-    
+
     try {
       const result = await client.query(sql, values);
       const usuarioDevuelto = result.rows[0]; // Obtenemos el primer resultado de la consulta
-  
+
       if (usuarioDevuelto) {
         const payload = {
           id: usuarioDevuelto.id,
@@ -85,16 +87,20 @@ export class UserRepository {
           issuer: "miOrganizacion",
         };
         token = jwt.sign(payload, secretKey, options);
-        
+
         return [{ success: true, message: "", token: token }, 200];
       } else {
-        return [{ success: false, message: "Usuario o clave inválida", token: "" }, 401];
+        return [
+          { success: false, message: "Usuario o clave inválida", token: "" },
+          401,
+        ];
       }
     } catch (error) {
       console.error("Error al ejecutar la consulta SQL:", error);
-      return [{ success: false, message: "Error en la base de datos", token: "" }, 500];
+      return [
+        { success: false, message: "Error en la base de datos", token: "" },
+        500,
+      ];
     }
   };
-  
-  
 }
