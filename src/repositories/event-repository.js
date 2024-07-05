@@ -48,9 +48,10 @@ export default class EventRepository {
         values.push(`%${params.tag}%`);
       }
 
-      if (conditions.length > 0) {
-        sql += ` WHERE ${conditions.join(" AND ")}`;
-      }
+            if (conditions.length > 0) {
+                sql += ` WHERE ${conditions.join(' AND ')}`;
+            }
+            sql += ` ORDER BY e.id ASC`;
 
       const result = await client.query(sql, values);
       return result.rows;
@@ -184,79 +185,8 @@ export default class EventRepository {
           sql += ` AND u.first_name ILIKE $${values.length + 1}`;
           values.push(`%${params.first_name}%`);
         }
-    };
-
-    createAsync = async (body) =>{
-        const client = new Client(config);
-        await client.connect();
-        try {
-            const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
-
-            if (!name || !description || name.length < 3 || description.length < 3) {
-                return ["Name and description must have at least 3 characters", 400];
-            }
-
-            if (max_assistance <= 0) {
-                return ["max_assistance must be greater than 0", 400];
-            }
-
-            const max_capacity = await this.getMaxCapacity(id_event_location);
-
-            if (max_assistance > max_capacity) {
-                return [`max_assistance (${max_assistance}) cannot be greater than max_capacity (${max_capacity})`, 400];
-            }
-
-            if (price < 0 || duration_in_minutes < 0) {
-                return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
-            }
-
-            const query = `
-                INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
-
-            const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user];
-            const result = await client.query(query, values);
-console.log(query,values)
-            return ["created", 201];
-        } catch (error) {
-            console.error("Error creating event:", error);
-            return [error.message, 500];
-        } finally {
-            await client.end();
-        }
     }
-
-    getMaxCapacity = async (id_event_location) =>{
-        const client = new Client(config);
-        await client.connect();
-        try {
-            const query = `
-                SELECT max_capacity
-                FROM event_locations
-                WHERE id = $1`;
-
-            const values = [id_event_location];
-            const result = await client.query(query, values);
-
-            if (result.rows.length > 0) {
-                return result.rows[0].max_capacity;
-            } else {
-                throw new Error(`Event location with ID ${id_event_location} not found`);
-            }
-        } catch (error) {
-            console.error("Error getting max capacity:", error);
-            throw error;
-        } finally {
-            await client.end();
-        }
-    }
-
-        if (params.last_name !== undefined) {
-          sql += ` AND u.last_name ILIKE $${values.length + 1}`;
-          values.push(`%${params.last_name}%`);
-        }
-
-        if (params.username !== undefined) {
+            if (params.username !== undefined) {
           sql += ` AND u.username ILIKE $${values.length + 1}`;
           values.push(`%${params.username}%`);
         }
@@ -305,6 +235,127 @@ console.log(query,values)
       return { collection, pagination };
     }
   };
+
+    createAsync = async (body) => {
+        const client = new Client(config);
+        await client.connect();
+        try {
+            const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
+
+            if (!name || !description || name.length < 3 || description.length < 3) {
+                return ["Name and description must have at least 3 characters", 400];
+            }
+
+            if (max_assistance <= 0) {
+                return ["max_assistance must be greater than 0", 400];
+            }
+
+            const max_capacity = await this.getMaxCapacity(id_event_location);
+
+            if (max_assistance > max_capacity) {
+                return [`max_assistance (${max_assistance}) cannot be greater than max_capacity (${max_capacity})`, 400];
+            }
+
+            if (price < 0 || duration_in_minutes < 0) {
+                return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
+            }
+
+            const query = `
+                INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+
+            const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user];
+            const result = await client.query(query, values);
+            
+console.log(query,values)
+            return ["created", 201];
+        } catch (error) {
+            console.error("Error creating event:", error);
+            return [error.message, 500];
+        } finally {
+            await client.end();
+        }
+    }
+
+    getMaxCapacity = async (id_event_location) =>{
+        const client = new Client(config);
+        await client.connect();
+        try {
+            const query = `
+                SELECT max_capacity
+                FROM event_locations
+                WHERE id = $1`;
+
+            const values = [id_event_location];
+            const result = await client.query(query, values);
+
+            if (result.rows.length > 0) {
+                return result.rows[0].max_capacity;
+            } else {
+                throw new Error(`Event location with ID ${id_event_location} not found`);
+            }
+        } catch (error) {
+            console.error("Error getting max capacity:", error);
+            throw error;
+        } finally {
+            await client.end();
+        }
+    }
+
+    updateAsync= async (id, body) => {
+    const client = new Client(config);
+    await client.connect();
+    try {
+        const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
+
+        if (!name || !description || name.length < 3 || description.length < 3) {
+            return ["Name and description must have at least 3 characters", 400];
+        }
+
+        if (max_assistance <= 0) {
+            return ["max_assistance must be greater than 0", 400];
+        }
+
+        const max_capacity = await this.getMaxCapacity(id_event_location);
+
+        if (max_assistance > max_capacity) {
+            return [`max_assistance (${max_assistance}) cannot be greater than max_capacity (${max_capacity})`, 400];
+        }
+
+        if (price < 0 || duration_in_minutes < 0) {
+            return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
+        }
+
+        const query = `
+            UPDATE events
+            SET name = $1,
+                description = $2,
+                id_event_category = $3,
+                id_event_location = $4,
+                start_date = $5,
+                duration_in_minutes = $6,
+                price = $7,
+                enabled_for_enrollment = $8,
+                max_assistance = $9,
+                id_creator_user = $10
+            WHERE id = $11`;
+
+        const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user, id];
+        const result = await client.query(query, values);
+
+        if (result.rowCount === 0) {
+            throw new Error(`Event with ID ${id} not found`);
+        }
+
+        return ["updated", 200];
+    } catch (error) {
+        console.error("Error updating event:", error);
+        return [error.message, 400];  
+    } finally {
+        await client.end();
+    }
+}
+
   ratingEnrollments = async (eventId,eventRating,bodyDesc) => {
     const client = new Client(config);
     await client.connect();
@@ -321,6 +372,7 @@ console.log(query,values)
         await client.end();
     }
 };
+    }
 
 
   //     const client = new Client(config);
@@ -334,4 +386,4 @@ console.log(query,values)
   //         await client.end();
   //     }
   // }
-}
+

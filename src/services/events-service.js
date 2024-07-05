@@ -52,7 +52,26 @@ export default class EventService{
             return resArray;
 
     };
+
+        createAsync = async (body) => {
+        const repo = new EventRepository();
+        let resArray = repo.createAsync(body);
+        return resArray;
+    }
+
+    UpdateAsync =  async (body) =>{
+        const repo = new EventRepository();
+        let restArray
+        if (body.id) {
+            return repo.updateAsync(body.id, body);
+        } else {
+            resArray = ["Id missing",404];
+
+                return restArray;
+        }
+    }
     
+
     ratingEnrollment = async(eventId,eventRating,bodyDesc) =>
     {
         const repo = new EventRepository();
@@ -67,10 +86,4 @@ export default class EventService{
             return resArray;
     };
 
-
-    createAsync = async (body) => {
-        const repo = new EventRepository();
-        let resArray = repo.createAsync(body);
-        return resArray;
-    }
 }

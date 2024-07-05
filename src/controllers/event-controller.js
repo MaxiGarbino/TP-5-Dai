@@ -32,16 +32,26 @@ router.post('', async(req, res) => {
     res.status(resArray[1]).send(resArray[0]);
 });
 
+
+router.put('/', async (req, res) => {
+    try {
+        const resArray = await svc.UpdateAsync(req.body);
+        res.status(resArray[1]).send(resArray[0]);
+    } catch (error) {
+        console.error("Error en el controlador de eventos:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
 router.patch('/:id/enrollment/:entero', async(req, res) => {
     const bodyDesc = req.body.observations;
     const eventId = req.params.id;
     const eventRating = req.params.entero;
     const resArray = await svc.ratingEnrollment(eventId,eventRating,bodyDesc);
     res.status(resArray[1]).send(resArray[0]);
-
 })
 // router.get('/search', async (req, res) => {
-//     const params = req.query;
+//     const params = req.query;c
 //     const resArray = await svc.searchAsync(params);
 //     res.status(resArray[1]).send(resArray[0]);
 // });
