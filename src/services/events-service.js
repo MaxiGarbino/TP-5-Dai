@@ -52,6 +52,21 @@ export default class EventService{
             return resArray;
 
     };
+    
+    ratingEnrollment = async(eventId,eventRating,bodyDesc) =>
+    {
+        const repo = new EventRepository();
+        const enrollments = await repo.ratingEnrollments(eventId,eventRating,bodyDesc);
+        let resArray;
+            if (enrollments != '') {
+            
+                resArray = [enrollments,200];;
+            } else {
+                resArray = ["id es inexistente",404];
+            }
+            return resArray;
+    };
+
 
     createAsync = async (body) => {
         const repo = new EventRepository();
