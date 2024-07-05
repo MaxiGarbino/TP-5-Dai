@@ -52,4 +52,10 @@ export default class EventService{
             return resArray;
 
     };
+
+    createAsync = async (body) => {
+        const repo = new EventRepository();
+        let resArray = repo.createAsync(body);
+        return resArray;
+    }
 }
