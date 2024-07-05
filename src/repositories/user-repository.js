@@ -12,18 +12,16 @@ export default class UserRepository {
       let last_name = body.last_name;
       let username = body.username;
       let password = body.password;
-      
       const sql = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
-      const result = await client.query(sql, values);
-      let id = result.rows[0];
-      
+      const result = await client.query(sql);
+      let obj = result.rows[0];
+      const id = obj.id + 1;
 
       function validarEmail(username) {
         // Expresión regular para validar un correo electrónico
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(username);
       }
-
       if (first_name.lenght < 3 || last_name.length < 3) {
         return [
           "Nombre o apellido estan vacion o tienen menos de 3 caracteres",
@@ -36,13 +34,14 @@ export default class UserRepository {
           if (password.length < 3) {
             return ["Contraseña vacio o con pocos caracteres", 400];
           } else {
+            console.log(id);
             const sql = `
             INSERT INTO public.users
                 (id,first_name, last_name, username, password)
             VALUES
                 ($1,$2,$3,$4,$5)`;
             const values = [id,first_name, last_name, username, password];
-            const result = await client.query(sql, values);
+            const result = await client.query(sql,values);
             return ["created", 200];
           }
         }
