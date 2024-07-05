@@ -58,4 +58,17 @@ export default class EventService{
         let resArray = repo.createAsync(body);
         return resArray;
     }
+
+    UpdateAsync =  async (body) =>{
+        const repo = new EventRepository();
+        let restArray
+        if (body.id) {
+            return repo.updateAsync(body.id, body);
+        } else {
+            resArray = ["Id missing",404];
+
+                return restArray;
+        }
+    }
+    
 }

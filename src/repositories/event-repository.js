@@ -52,6 +52,7 @@ export default class EventRepository {
             if (conditions.length > 0) {
                 sql += ` WHERE ${conditions.join(' AND ')}`;
             }
+            sql += ` ORDER BY e.id ASC`;
 
             const result = await client.query(sql, values);
             return result.rows;
@@ -306,6 +307,60 @@ console.log(query,values)
             await client.end();
         }
     }
+
+    async updateAsync(id, body) {
+    const client = new Client(config);
+    await client.connect();
+    try {
+        const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
+
+        if (!name || !description || name.length < 3 || description.length < 3) {
+            return ["Name and description must have at least 3 characters", 400];
+        }
+
+        if (max_assistance <= 0) {
+            return ["max_assistance must be greater than 0", 400];
+        }
+
+        const max_capacity = await this.getMaxCapacity(id_event_location);
+
+        if (max_assistance > max_capacity) {
+            return [`max_assistance (${max_assistance}) cannot be greater than max_capacity (${max_capacity})`, 400];
+        }
+
+        if (price < 0 || duration_in_minutes < 0) {
+            return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
+        }
+
+        const query = `
+            UPDATE events
+            SET name = $1,
+                description = $2,
+                id_event_category = $3,
+                id_event_location = $4,
+                start_date = $5,
+                duration_in_minutes = $6,
+                price = $7,
+                enabled_for_enrollment = $8,
+                max_assistance = $9,
+                id_creator_user = $10
+            WHERE id = $11`;
+
+        const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user, id];
+        const result = await client.query(query, values);
+
+        if (result.rowCount === 0) {
+            throw new Error(`Event with ID ${id} not found`);
+        }
+
+        return ["updated", 200];
+    } catch (error) {
+        console.error("Error updating event:", error);
+        return [error.message, 400];  
+    } finally {
+        await client.end();
+    }
+}
 
 
     //     const client = new Client(config);
