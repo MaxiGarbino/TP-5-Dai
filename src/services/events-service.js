@@ -71,6 +71,15 @@ export default class EventService{
         }
     }
     
+     deleteEvent = async(id)=> {
+        try {
+            const repo = new EventRepository();
+            const result = await repo.deleteEvent(id);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     ratingEnrollment = async(eventId,eventRating,bodyDesc) =>
     {
