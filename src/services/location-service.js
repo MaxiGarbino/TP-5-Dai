@@ -27,14 +27,7 @@ export default class LocationService{
     }
     getLocationByIdAsync = async (id) =>{
         const repo = new LocationRepository();
-        const arrayLocation= await repo.getLocationByIdAsync(id);
-        let resArray;
-        if (arrayLocation != '') {
-            
-            resArray = [arrayLocation,200];;
-        } else {
-            resArray = ["Ubicacion no encontrada",404];
-        }
+        const resArray= await repo.getLocationByIdAsync(id);
         return resArray;
     }
 

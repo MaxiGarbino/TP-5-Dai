@@ -5,7 +5,9 @@ const { Client } = pkg;
 const client = new Client(config);
 
 await client.connect();
-export default class UserRepository {
+let token = '';
+export {token};
+export class UserRepository {
   createAsync = async (body) => {
     try {
       let first_name = body.first_name;
@@ -82,7 +84,8 @@ export default class UserRepository {
           expiresIn: "2h",
           issuer: "miOrganizacion",
         };
-        const token = jwt.sign(payload, secretKey, options);
+        token = jwt.sign(payload, secretKey, options);
+        
         return [{ success: true, message: "", token: token }, 200];
       } else {
         return [{ success: false, message: "Usuario o clave inválida", token: "" }, 401];
