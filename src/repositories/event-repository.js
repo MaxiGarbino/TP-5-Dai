@@ -25,10 +25,10 @@ export default class EventRepository {
       const values = [];
       const conditions = [];
 
-      if (params.name) {
-        conditions.push(`e.name ILIKE $${values.length + 1}`);
-        values.push(`%${params.name}%`);
-      }
+        try {
+            let sql = `SELECT e.* FROM events as e left JOIN event_categories as ec ON e.id_event_category = ec.id left JOIN event_tags et ON e.id = et.id_event left JOIN tags as t on t.id = et.id_tag`;
+            const values = [];
+            const conditions = [];
 
       if (params.category) {
         conditions.push(`ec.name ILIKE $${values.length + 1} 
@@ -55,7 +55,9 @@ export default class EventRepository {
     } finally {
       await client.end();
     }
-  };
+  } catch(e){
+    console.log(e);
+  }
 
   getByIdAsync = async (id) => {
     const client = new Client(config);
@@ -180,6 +182,72 @@ export default class EventRepository {
           sql += ` AND u.first_name ILIKE $${values.length + 1}`;
           values.push(`%${params.first_name}%`);
         }
+    };
+
+    createAsync = async (body) =>{
+        const client = new Client(config);
+        await client.connect();
+        try {
+            const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
+
+            if (!name || !description || name.length < 3 || description.length < 3) {
+                return ["Name and description must have at least 3 characters", 400];
+            }
+
+            if (max_assistance <= 0) {
+                return ["max_assistance must be greater than 0", 400];
+            }
+
+            const max_capacity = await this.getMaxCapacity(id_event_location);
+
+            if (max_assistance > max_capacity) {
+                return [`max_assistance (${max_assistance}) cannot be greater than max_capacity (${max_capacity})`, 400];
+            }
+
+            if (price < 0 || duration_in_minutes < 0) {
+                return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
+            }
+
+            const query = `
+                INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+
+            const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user];
+            const result = await client.query(query, values);
+console.log(query,values)
+            return ["created", 201];
+        } catch (error) {
+            console.error("Error creating event:", error);
+            return [error.message, 500];
+        } finally {
+            await client.end();
+        }
+    }
+
+    getMaxCapacity = async (id_event_location) =>{
+        const client = new Client(config);
+        await client.connect();
+        try {
+            const query = `
+                SELECT max_capacity
+                FROM event_locations
+                WHERE id = $1`;
+
+            const values = [id_event_location];
+            const result = await client.query(query, values);
+
+            if (result.rows.length > 0) {
+                return result.rows[0].max_capacity;
+            } else {
+                throw new Error(`Event location with ID ${id_event_location} not found`);
+            }
+        } catch (error) {
+            console.error("Error getting max capacity:", error);
+            throw error;
+        } finally {
+            await client.end();
+        }
+    }
 
         if (params.last_name !== undefined) {
           sql += ` AND u.last_name ILIKE $${values.length + 1}`;
@@ -200,6 +268,8 @@ export default class EventRepository {
           sql += ` AND e.rating >= $${values.length + 1}`;
           values.push(params.rating);
         }
+      } catch(e){
+        
       }
 
       const result = await client.query(sql, values);
@@ -231,8 +301,6 @@ export default class EventRepository {
       };
 
       return { collection, pagination };
-    } finally {
-      await client.end();
     }
   };
 
