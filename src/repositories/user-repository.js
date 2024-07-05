@@ -5,8 +5,10 @@ const { Client } = pkg;
 const client = new Client(config);
 
 await client.connect();
+
 let token = "";
 export { token };
+
 export class UserRepository {
   createAsync = async (body) => {
     try {

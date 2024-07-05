@@ -1,6 +1,6 @@
 import pkg from 'pg'
-import jwt from 'jsonwebtoken';
 import config from '../configs/db-config.js';
+import jwt from 'jsonwebtoken';
 import {token} from '../repositories/user-repository.js';
 const { Client } = pkg
 const client = new Client(config);
@@ -28,12 +28,10 @@ export default class LocationRepository {
         
         const secretKey = "ClaveSecreta3000$";
         let validacionToken = token; 
-        console.log(token);
         let payloadOriginal = null;
         let resArray;
         try{
             payloadOriginal = await jwt.verify(validacionToken,secretKey);
-            console.log(payloadOriginal);
             if(payloadOriginal != null){
                 let sql = `select el.* from locations l inner join event_locations el on l.id = l.id WHERE l.id=$1`;
                 const values = [id];

@@ -1,6 +1,8 @@
 import pkg from "pg";
 const { Client } = pkg;
 import config from "../configs/db-config.js";
+import jwt from 'jsonwebtoken';
+import {token} from '../repositories/user-repository.js';
 
 export default class EventRepository {
   // async getAllAsync() {
@@ -183,9 +185,58 @@ export default class EventRepository {
           sql += ` AND u.first_name ILIKE $${values.length + 1}`;
           values.push(`%${params.first_name}%`);
         }
-    };
+    }
+            if (params.username !== undefined) {
+          sql += ` AND u.username ILIKE $${values.length + 1}`;
+          values.push(`%${params.username}%`);
+        }
 
-    createAsync = async (body) =>{
+        if (params.attended !== undefined) {
+          sql += ` AND e.attended = $${values.length + 1}`;
+          values.push(params.attended);
+        }
+
+        if (params.rating !== undefined) {
+          sql += ` AND e.rating >= $${values.length + 1}`;
+          values.push(params.rating);
+        }
+      } catch(e){
+        
+      }
+
+      const result = await client.query(sql, values);
+      const enrollments = result.rows;
+
+      const collection = enrollments.map((enrollment) => ({
+        id: enrollment.id,
+        id_event: enrollment.id_event,
+        id_user: enrollment.id_user,
+        user: {
+          id: enrollment.user_id,
+          first_name: enrollment.first_name,
+          last_name: enrollment.last_name,
+          username: enrollment.username,
+          password: enrollment.password,
+        },
+        description: enrollment.description,
+        registration_date_time: enrollment.registration_date_time,
+        attended: enrollment.attended,
+        observations: enrollment.observations,
+        rating: enrollment.rating,
+      }));
+
+      const pagination = {
+        limit: 0,
+        offset: 0,
+        nextPage: "",
+        total: collection.length,
+      };
+
+      return { collection, pagination };
+    }
+  };
+
+    createAsync = async (body) => {
         const client = new Client(config);
         await client.connect();
         try {
@@ -305,56 +356,24 @@ console.log(query,values)
     }
 }
 
+  ratingEnrollments = async (eventId,eventRating,bodyDesc) => {
+    const client = new Client(config);
+    await client.connect();
+    
+    try {
+        let sql = `
+        INSERT INTO event_enrollments (id_event,id_user,description,registration_date_time,attended,observations,rating) 
+        VALUES ($1,1,'Registered for ' ||(select name from events where events.id = $1),now()::timestamp,false,$2,$3)
+            `
+        const values = [eventId,bodyDesc,eventRating];
 
-        if (params.username !== undefined) {
-          sql += ` AND u.username ILIKE $${values.length + 1}`;
-          values.push(`%${params.username}%`);
-        }
-
-        if (params.attended !== undefined) {
-          sql += ` AND e.attended = $${values.length + 1}`;
-          values.push(params.attended);
-        }
-
-        if (params.rating !== undefined) {
-          sql += ` AND e.rating >= $${values.length + 1}`;
-          values.push(params.rating);
-        }
-      } catch(e){
-        
-      }
-
-      const result = await client.query(sql, values);
-      const enrollments = result.rows;
-
-      const collection = enrollments.map((enrollment) => ({
-        id: enrollment.id,
-        id_event: enrollment.id_event,
-        id_user: enrollment.id_user,
-        user: {
-          id: enrollment.user_id,
-          first_name: enrollment.first_name,
-          last_name: enrollment.last_name,
-          username: enrollment.username,
-          password: enrollment.password,
-        },
-        description: enrollment.description,
-        registration_date_time: enrollment.registration_date_time,
-        attended: enrollment.attended,
-        observations: enrollment.observations,
-        rating: enrollment.rating,
-      }));
-
-      const pagination = {
-        limit: 0,
-        offset: 0,
-        nextPage: "",
-        total: collection.length,
-      };
-
-      return { collection, pagination };
+        const result = await client.query(sql, values);
+    } finally {
+        await client.end();
     }
-  };
+};
+    }
+
 
   //     const client = new Client(config);
   //     await client.connect();
@@ -367,4 +386,4 @@ console.log(query,values)
   //         await client.end();
   //     }
   // }
-}
+
