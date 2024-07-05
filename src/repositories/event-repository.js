@@ -1,6 +1,8 @@
 import pkg from "pg";
 const { Client } = pkg;
 import config from "../configs/db-config.js";
+import jwt from 'jsonwebtoken';
+import {token} from '../repositories/user-repository.js';
 
 export default class EventRepository {
   // async getAllAsync() {
