@@ -356,6 +356,31 @@ console.log(query,values)
     }
 }
 
+deleteEvent = async(id)=> { 
+    const client = new Client(config);
+    await client.connect();
+
+    try {
+        const deleteQuery = `
+            DELETE FROM events
+            WHERE id = $1`;
+
+        const deleteValues = [id];
+        const result = await client.query(deleteQuery, deleteValues);
+
+        if (result.rowCount === 0) {
+            throw { message: `Event with ID ${id} not found`, status: 404 };
+        }
+
+        return { message: "Event deleted successfully", status: 200 };
+    } catch (error) {
+        console.error("Error deleting event:", error);
+        throw { message: error.message || "Internal server error", status: error.status || 500 };
+    } finally {
+        await client.end();
+    }
+}
+
   ratingEnrollments = async (eventId,eventRating,bodyDesc) => {
     const client = new Client(config);
     await client.connect();

@@ -43,6 +43,18 @@ router.put('/', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => { //no funciona
+    const eventId = req.params.id;
+        const result = await svc.deleteEvent(eventId);
+        if (result === 0) {
+            return res.status(404).json({ error: "Event not found or does not belong to authenticated user" });
+        }
+        res.status(200).json({ message: "Event deleted successfully" });
+    }
+);
+
+
+
 router.patch('/:id/enrollment/:entero', async(req, res) => {
     const bodyDesc = req.body.observations;
     const eventId = req.params.id;
