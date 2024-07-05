@@ -305,6 +305,23 @@ console.log(query,values)
       return { collection, pagination };
     }
   };
+  ratingEnrollments = async (eventId,eventRating,bodyDesc) => {
+    const client = new Client(config);
+    await client.connect();
+    
+    try {
+        let sql = `
+        INSERT INTO event_enrollments (id_event,id_user,description,registration_date_time,attended,observations,rating) 
+        VALUES ($1,1,'Registered for ' ||(select name from events where events.id = $1),now()::timestamp,false,$2,$3)
+            `
+        const values = [eventId,bodyDesc,eventRating];
+
+        const result = await client.query(sql, values);
+    } finally {
+        await client.end();
+    }
+};
+
 
   //     const client = new Client(config);
   //     await client.connect();
