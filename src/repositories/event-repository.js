@@ -247,11 +247,16 @@ export default class EventRepository {
                 return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
             }
 
-            const query = `
-                INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+            const sql1 = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
+            const result1 = await client.query(sql1);
+            let obj = result1.rows[0];
+            const id = obj.id + 1;
 
-            const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user];
+            const query = `
+                INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user,id)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11)`;
+
+            const values = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user,id];
             const result = await client.query(query, values);
 
             return ["created", 201];
