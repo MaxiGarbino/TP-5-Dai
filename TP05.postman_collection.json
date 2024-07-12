@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "c36aa4ba-6999-4085-86d7-31164067e328",
-		"name": "TP05 Copy",
+		"_postman_id": "66065898-c6ed-456c-9948-91cbbb13b3b2",
+		"name": "TP05",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -56,12 +56,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Buenos Aires\",\r\n    \"full_name\": \"Provincia de Buenos Aires\",\r\n    \"latitude\": -34.6037,\r\n    \"longitude\": -58.3816,\r\n    \"display_order\": 30\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n\"name\" : \"Chaco Provincia\",\r\n\"full_name\" : \"Provincia de Chaco\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}\r\n"
 						},
 						"url": {
 							"raw": "http://localhost:3000/api/province",
@@ -85,12 +80,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"Nuevo nombre\",\r\n  \"full_name\": \"Nuevo nombre completo\",\r\n  \"latitude\": -34.5,\r\n  \"longitude\": -58.8,\r\n  \"display_order\": 50\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n\"id\" : 34,\r\n\"name\" : \"Provincia Modificada\",\r\n\"full_name\" : \"Provincia Modificada\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/api/province",
@@ -113,7 +103,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/province/4",
+							"raw": "http://localhost:3000/api/province/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -122,7 +112,7 @@
 							"path": [
 								"api",
 								"province",
-								"4"
+								"3"
 							]
 						}
 					},
@@ -134,12 +124,12 @@
 			"name": "events",
 			"item": [
 				{
-					"name": "2 - Todos los eventos",
+					"name": "4 - Detalle evento",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/",
+							"raw": "http://localhost:3000/api/event/{id}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -148,7 +138,7 @@
 							"path": [
 								"api",
 								"event",
-								""
+								"{id}"
 							]
 						}
 					},
@@ -160,42 +150,29 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event?name=Concert",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
+							"raw": "/api/event/?name={texto}&category={texto}&startdate={fecha YYYY-MM-DD}&tag={texto}",
 							"path": [
 								"api",
-								"event"
+								"event",
+								""
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "Concert"
+									"value": "{texto}"
+								},
+								{
+									"key": "category",
+									"value": "{texto}"
+								},
+								{
+									"key": "startdate",
+									"value": "{fecha YYYY-MM-DD}"
+								},
+								{
+									"key": "tag",
+									"value": "{texto}"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "4 - Detalle evento",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/event/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"event",
-								"1"
 							]
 						}
 					},
@@ -207,7 +184,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/1/enrollment?attended=True&username=jsmith",
+							"raw": "http://localhost:3000/api/event/{id}/enrollment?first_name={texto}&last_name={texto}&username={texto}&attended={boolean}&rating={entero}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -216,17 +193,29 @@
 							"path": [
 								"api",
 								"event",
-								"1",
+								"{id}",
 								"enrollment"
 							],
 							"query": [
 								{
-									"key": "attended",
-									"value": "True"
+									"key": "first_name",
+									"value": "{texto}"
+								},
+								{
+									"key": "last_name",
+									"value": "{texto}"
 								},
 								{
 									"key": "username",
-									"value": "jsmith"
+									"value": "{texto}"
+								},
+								{
+									"key": "attended",
+									"value": "{boolean}"
+								},
+								{
+									"key": "rating",
+									"value": "{entero}"
 								}
 							]
 						}
@@ -238,17 +227,26 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Maxi@gmail.com\",\r\n    \"password\":\"HolaProfe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:3000/user/login/&username={texto}&password={texto}",
+							"raw": "http://localhost:3000/api/user/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"api",
 								"user",
-								"login",
-								"&username={texto}&password={texto}"
+								"login"
 							]
 						}
 					},
@@ -269,13 +267,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/user/register",
+							"raw": "http://localhost:3000/api/user/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"api",
 								"user",
 								"register"
 							]
@@ -354,9 +353,21 @@
 				},
 				{
 					"name": "12 - Categorias - GetAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:3000/api/event-category",
 							"protocol": "http",
@@ -398,6 +409,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"id_location\" : 1,\r\n\"name\" : \"Meeting Room\",\r\n\"full_address\":\"543 DR.G St\",\r\n\"max_capacity\":150,\r\n\"latitude\" : -21.895086288452148,\r\n\"longitude\" : -56.93218994140625,\r\n\"id_creator_user\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:3000/api/event-category/",
 							"protocol": "http",
@@ -417,8 +437,17 @@
 				{
 					"name": "12 - Categorias - Edit",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"id\" : 34,\r\n\"name\" : \"Provincia Modificada\",\r\n\"full_name\" : \"Provincia Modificada\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:3000/api/event-category/",
 							"protocol": "http",
@@ -568,6 +597,16 @@
 				{
 					"name": "11 - Locations Provincia",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
