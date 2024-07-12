@@ -35,7 +35,7 @@ export default class LocationRepository {
             
             if(payloadOriginal != null){
                 console.log(payloadOriginal)
-                let sql = `select el.* from locations l inner join event_locations el on l.id = l.id WHERE l.id=$1`;
+                let sql = `select el.* from locations l inner join event_locations el on l.id = l.id WHERE el.id_location=$1`;
                 const values = [id];
                 let result = await client.query(sql, values)
                 const Location = result.rows;
