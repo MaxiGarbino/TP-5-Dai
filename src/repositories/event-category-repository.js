@@ -49,23 +49,25 @@ export default class EventCategoryService {
         return ["Categoria de evento no encontrada", 404];
       }
 
+      
 
       if (body.name === "" || body.name.length <= 3) {
-        
-      const sql2 = `UPDATE event_categories
-      SET name = $1,
-          display_order = $2
-      WHERE id = $3`;
-
-const values = [body.name, parseInt(body.display_order), parseInt(valuesID)];
-const result = await client.query(sql2, values);
         return [
           "El nombre (name) está vacío o tiene menos de tres (3) letras.",
           400,
         ];
       }
+      else{
+        const sql2 = `UPDATE event_categories
+                          SET name = $1,
+                              display_order = $2
+                          WHERE id = $3`;
 
+      const values = [body.name, parseInt(body.display_order), parseInt(valuesID)];
+      const result = await client.query(sql2, values);
       return ["Update", 200];
+      }
+
     } catch (error) {
       return [error.message, 400];
     }
