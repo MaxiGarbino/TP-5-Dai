@@ -22,7 +22,7 @@ export default class EventCategoryService {
   createAsync = async (body) => {
     try {
       const sql1 = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
-      const result1 = await client.query(sql1);
+      let result1 = await client.query(sql1);
       let obj = result1.rows[0];
       let id = obj.id + 1;
       let nombre = body.name;
