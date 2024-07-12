@@ -127,11 +127,13 @@ export default class EventLocationRepository {
                 let max_capacity = parseInt(body.max_capacity);
                 let latitude = parseFloat(body.latitude);
                 let longitude = parseFloat(body.longitude);
-                console.log("llegue");
+                const sql3 = `
+                select id from event_locations where id = $1`;
+                const values3 = [id];
+                const result3 = await client.query(sql2, values2);
+                if(parseInt(result3.rows.id_creator_user) == payloadOriginal.id){
                 if(name.length > 3 && full_address.length > 3){
-                    console.log("llegue");
                     if(max_capacity > 0){
-                        console.log("llegue");
                         const sql2 = `
                         select id from locations where id = $1`;
                         const values2 = [id];
@@ -147,17 +149,20 @@ export default class EventLocationRepository {
                             return ["update", 200]; 
                         }
                         return ["El id_location es inexistente.",400]
-                    }
-                    else{
+                    }else{
                         return ["El max_capacity es el número 0 (cero) o negativo.", 400];
                     }
+                    }else{
+                        return ["Unauthorized", 401];
+                    }
+                    
                 }
                 else{
                     return ["El nombre  (name) o la dirección (full_address) están vacíos o tienen menos de tres (3) letras", 400];
                 }
             }
             else{
-                return ["Unauthorized", 401];
+                return ["Error, este event location no es tuyo", 404];
             }
         } 
         catch (error) {
