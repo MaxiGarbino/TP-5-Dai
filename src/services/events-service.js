@@ -1,4 +1,7 @@
 import EventRepository from '../repositories/event-repository.js';
+import jwt from "jsonwebtoken";
+const secretKey = "ClaveSecreta3000$";
+
 export default class EventService{
 
     searchAsync = async (params) => {
@@ -58,12 +61,49 @@ export default class EventService{
         }
     }
     
-    deleteEventAsync = async (id) => {
+    deleteEvent = async(id, token)=> {
         const repo = new EventRepository();
-        let Res = await repo.deleteEventAsync(id);
-        return Res;
-    }
 
+        try {
+          if (!token) {
+            return { success: false, status: 401, message: "Unauthorized. Token missing." };
+          }
+    
+          let payloadOriginal;
+          try {
+            payloadOriginal = jwt.verify(token, secretKey);
+          } catch (error) {
+            console.error("Error verifying JWT:", error);
+            return { success: false, status: 401, message: "Unauthorized. Invalid token." };
+          }
+    
+          const idCreatorUser = await repo.checkEventExistence(id);
+          if (!idCreatorUser) {
+            return { success: false, status: 404, message: `Event with ID ${id} not found` };
+          }
+    
+          if (idCreatorUser !== payloadOriginal.id) {
+            return { success: false, status: 401, message: "Unauthorized. Event does not belong to authenticated user." };
+          }
+    
+          const registeredUsersCount = await repo.checkRegisteredUsers(id);
+          if (registeredUsersCount > 0) {
+            return { success: false, status: 400, message: "There are registered users for this event" };
+          }
+    
+          const deletionSuccessful = await repo.deleteEvent(id);
+          if (!deletionSuccessful) {
+            return { success: false, status: 404, message: `Event with ID ${id} not found` };
+          }
+    
+          return { success: true, status: 200, message: "Event deleted successfully" };
+        } catch (error) {
+          console.error("Error in event service:", error);
+          return { success: false, status: 500, message: "Internal server error" };
+        }
+      }
+    
+    
 
     addEnrollmentOfUser = async(id) =>
     {

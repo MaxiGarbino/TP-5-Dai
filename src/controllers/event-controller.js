@@ -54,12 +54,23 @@ router.put('/', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    const id = req.params.id;
-    const returnArray = await svc.deleteEventAsync(id);
-    res.status(returnArray[1]).json(returnArray[0]);
+    const eventId = req.params.id;
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+  
+    try {
+      const result = await svc.deleteEvent(eventId, token);
+  
+      if (!result.success) {
+        return res.status(result.status).json({ error: result.message });
+      }
+  
+      return res.status(result.status).json({ message: result.message });
+    } catch (error) {
+      console.error("Error in event controller:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
   });
-
-
+  
 
 
 router.patch('/:id/enrollment/:entero', async(req, res) => {
