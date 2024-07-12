@@ -174,6 +174,9 @@ export default class EventLocationRepository {
             let validacionToken = token; 
             let payloadOriginal = null;
             payloadOriginal = await jwt.verify(validacionToken,secretKey);
+            if(payloadOriginal != null){
+
+            
             let sql = `SELECT *
             FROM public.event_locations WHERE id=$1`;
             const values = [id];
@@ -192,6 +195,9 @@ export default class EventLocationRepository {
           let sql2 = `DELETE FROM event_locations WHERE id=$1`;
           let result = await client.query(sql2, valuesID);
           resArray = ["Location de evento eliminada correctamente", 200];
+        }else{
+            resArray = ["Unauthorized", 401];
+        }
             }
           else{
             resArray = ["Unauthorized", 401];
