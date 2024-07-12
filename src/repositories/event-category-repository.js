@@ -98,7 +98,7 @@ export default class EventCategoryService {
        
     }
     } catch (error) {
-      resArray = ["Categoria de evento no encontrada", 404];
+      resArray = ["Error", 404];
       console.log(error);
     }
 
