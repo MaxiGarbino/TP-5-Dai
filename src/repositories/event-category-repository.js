@@ -78,7 +78,16 @@ export default class EventCategoryService {
     const valuesID = [parseInt(id)];
     try {
       
-        let sql3 = `UPDATE events
+      const sql5 = `SELECT id from event_categories WHERE id=$1`;
+      const valuesID = [parseInt(body.id)];
+      const resultID = await client.query(sql5, valuesID);
+
+      if (resultID.rows.length === 0) {
+        return ["Categoria de evento no encontrada", 404];
+      } 
+      else{
+       
+      let sql3 = `UPDATE events
         SET id_event_category = null
         WHERE id = $1`;
         let result3 = await client.query(sql3, valuesID);
@@ -86,6 +95,8 @@ export default class EventCategoryService {
       let sql2 = `DELETE FROM event_categories WHERE id=$1`;
       let result = await client.query(sql2, valuesID);
       resArray = ["Categoria de evento eliminada correctamente", 200];
+       
+    }
     } catch (error) {
       resArray = ["Categoria de evento no encontrada", 404];
       console.log(error);
