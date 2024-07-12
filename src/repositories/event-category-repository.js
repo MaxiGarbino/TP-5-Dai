@@ -24,7 +24,7 @@ export default class EventCategoryService {
       const sql1 = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
       const result1 = await client.query(sql1);
       let obj = result1.rows[0];
-      const id = obj.id + 1;
+      let id = obj.id + 1;
       let nombre = body.name;
       let display_order = body.display_order;
       const sql = `
