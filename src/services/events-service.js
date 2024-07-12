@@ -24,6 +24,7 @@ export default class EventService{
             resArray = ["No se encuentran eventos", 404];
         }
         return resArray;
+        
     }
     getByIdAsync = async (id) => {
         const repo = new EventRepository();
@@ -49,7 +50,7 @@ export default class EventService{
 
     };
 
-        createAsync = async (body) => {
+    createAsync = async (body) => {
         const repo = new EventRepository();
         let resArray = repo.createAsync(body);
         return resArray;

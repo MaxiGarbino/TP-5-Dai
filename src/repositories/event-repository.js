@@ -224,9 +224,16 @@ export default class EventRepository {
     };
 
     createAsync = async (body) => {
+        
+        
         const client = new Client(config);
         await client.connect();
         try {
+            const secretKey = "ClaveSecreta3000$";
+        let validacionToken = token; 
+        let payloadOriginal = null;
+        payloadOriginal = await jwt.verify(validacionToken,secretKey);
+        if(payloadOriginal != null){
             const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
 
             if (!name || !description || name.length < 3 || description.length < 3) {
@@ -260,6 +267,9 @@ export default class EventRepository {
             const result = await client.query(query, values);
 
             return ["created", 201];
+        }else{
+            return ["Unauthorized",401]
+        }
         } catch (error) {
             console.error("Error creating event:", error);
             return [error.message, 500];
@@ -297,6 +307,11 @@ export default class EventRepository {
         const client = new Client(config);
         await client.connect();
         try {
+            const secretKey = "ClaveSecreta3000$";
+            let validacionToken = token; 
+            let payloadOriginal = null;
+            payloadOriginal = await jwt.verify(validacionToken,secretKey);
+            if(payloadOriginal != null){
             const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
 
             if (!name || !description || name.length < 3 || description.length < 3) {
@@ -339,6 +354,9 @@ export default class EventRepository {
             }
 
             return ["updated", 200];
+        }else{
+            return ["Unauthorized", 401];
+        }
         } catch (error) {
             console.error("Error updating event:", error);
             return [error.message, 400];
@@ -352,18 +370,31 @@ export default class EventRepository {
         await client.connect();
 
         try {
+            const secretKey = "ClaveSecreta3000$";
+            let validacionToken = token; 
+            let payloadOriginal = null;
+            payloadOriginal = await jwt.verify(validacionToken,secretKey);
+            if(payloadOriginal != null){
+                let sql2 = `SELECT * from events WHERE id=$1`;
+                const values = [id];
+                let result1 = await client.query(sql2, values);
+                
             const deleteQuery = `
                 DELETE FROM events
                 WHERE id = $1`;
 
             const deleteValues = [id];
+
+            if(Object.keys(result1).length !== 0){
             const result = await client.query(deleteQuery, deleteValues);
-
-            if (result.rowCount === 0) {
-                throw { message: `Event with ID ${id} not found`, status: 404 };
-            }
-
             return { message: "Event deleted successfully", status: 200 };
+        }else {throw { message: `Event with ID ${id} not found`, status: 404 };}
+
+           
+        }else{
+            
+            return ["Unauthorized", 401];
+        }
         } catch (error) {
             console.error("Error deleting event:", error);
             throw { message: error.message || "Internal server error", status: error.status || 500 };
