@@ -518,15 +518,22 @@ createAsync = async (body, token) => {
 
 
 deleteEventAsync = async (id) => {
-  const client = new Client(config);
+    let payloadOriginal = null;
+    try {
+        payloadOriginal = jwt.verify(token, secretKey);
+    } catch (error) {
+        console.error("Error verifying JWT:", error);
+        return ["Unauthorized", 401];
+    }
+    const client = new Client(config);
   await client.connect();
   const sql1 = 'SELECT COUNT(id_user) FROM event_enrollments ee INNER JOIN events e ON ee.id_event = e.id WHERE e.id = $1';
   const values1 = [id];
   let cantidadUsuariosAnotados = await client.query(sql1, values1)
   const sql = `
-DELETE FROM event_enrollments WHERE id_event <= $1;
-DELETE FROM event_tags WHERE id_event <= $1; 
-DELETE FROM events WHERE id = $1`;
+    DELETE FROM event_enrollments WHERE id_event <= $1;
+    DELETE FROM event_tags WHERE id_event <= $1; 
+    DELETE FROM events WHERE id = $1`;
   const values = [id];
   let eventoEliminado = await client.query(sql, values)
   if (eventoEliminado.rowCount == 0) {
