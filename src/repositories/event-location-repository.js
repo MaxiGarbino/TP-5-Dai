@@ -107,9 +107,8 @@ export default class EventLocationRepository {
             }
         } 
         catch (error) {
-          
-            console.log(error);
-            return ["Unauthorized", 401];
+            console.error("Error posting event:", error);
+            return [error.message, 404];
         }
     };
     putAsync = async (body) => {
@@ -166,9 +165,8 @@ export default class EventLocationRepository {
             }
         } 
         catch (error) {
-          
-            console.log(error);
-            return ["Unauthorized", 401];
+            console.error("Error updating event:", error);
+            return [error.message, 404];
         }
     };
     deleteAsync = async (id) => {
