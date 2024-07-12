@@ -8,7 +8,7 @@ const client = new Client(config);
 await client.connect();
 export default class ProvinceRepository {
   getAllAsync = async () => {
-    let sql = `SELECT * from provinces`;
+    let sql = `SELECT * from provinces order by id`;
     let result = await client.query(sql);
     const provincias = result.rows;
     return provincias;
@@ -70,70 +70,6 @@ export default class ProvinceRepository {
     }
 };
 
-  // putAsync = async (body) => {
-  //   try {
-  //     const sql1 = `SELECT id from provinces WHERE id=$1`;
-  //     const valuesID = [parseInt(body.id)];
-  //     const resultID = await client.query(sql1, valuesID);
-
-  //     if (resultID.rows.length === 0) {
-  //       return ["Provincia no encontrada", 404];
-  //     }
-
-  //     const sql2 = `UPDATE provinces
-  //                         SET name = $1,
-  //                             full_name = $2,
-  //                             latitude = $3,
-  //                             longitude = $4,
-  //                             display_order = $5
-  //                         WHERE id = $6`;
-
-  //     const values = [
-  //       body.name,
-  //       body.full_name,
-  //       body.latitude,
-  //       body.longitude,
-  //       body.display_order,
-  //       body.id,
-  //     ];
-  //     const result = await client.query(sql2, values);
-
-  //     if (body.name === "" || body.name.length <= 3) {
-  //       return ["No cumple con las reglas de negocio", 400];
-  //     }
-
-  //     return ["Update", 200];
-  //   } catch (error) {
-  //     return [error.message, 400];
-  //   }
-  // };
-
-  /*let resArray = "";
-        const createPutAsync = body.id;
-        const provincefv = provincias.findIndex(provincia => provincia.id == body.id)
-        if (provincefv != -1) {
-            if( body.name="" || body.name.length <= 3)
-            {
-                resArray = ["No cumple con las reglas de negocio",400]
-            }
-            else
-            {
-                resArray = ["Created",201]
-                provincias[body.id-1] = 
-                {
-                    id: body.id,
-                    name: body.name,
-                    full_name : body.full_name,
-                    latitude: body.atitude,
-                    longitude: body.longitude,
-                    display_order : body.display_order
-                }
-            }
-        } 
-        else {
-            resArray = ["Provincia no encontrada",404]
-        }
-        return resArray;*/
   putAsync = async (body) => {
     try {
       const sql1 = `SELECT id from provinces WHERE id=$1`;
@@ -186,9 +122,23 @@ export default class ProvinceRepository {
 
     return resArray;
   };
+
+  getLocationsByProvinceId = async (provinceId)=> {
+    try {
+        const query = 'SELECT * FROM locations WHERE id_province = $1';
+        const result = await client.query(query, [provinceId]);
+
+        if (result.rows.length === 0) {
+            return null;
+        }
+
+        return result.rows;
+    } catch (error) {
+        console.error('Error fetching locations:', error);
+        throw error;
+    }
 }
-/*
-    getByIdAsync = async (id) => {...}
-    createAsync = async (entity) => {...}
-    updateAsync = async (entity) => {...}
-    deleteByIdAsync = async (id) => {...}*/
+
+}
+
+

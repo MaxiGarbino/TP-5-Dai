@@ -35,14 +35,17 @@ router.post('/:id/enrollment', async(req, res) => {
 
 router.post('', async(req, res) => {
     const body = req.body;
-    const resArray = await svc.createAsync(body);
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
+    const resArray = await svc.createAsync(body,token);
     res.status(resArray[1]).send(resArray[0]);
 });
 
 
 router.put('/', async (req, res) => {
     try {
-        const resArray = await svc.UpdateAsync(req.body);
+        const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
+        const resArray = await svc.UpdateAsync(req.body,token);
+        
         res.status(resArray[1]).send(resArray[0]);
     } catch (error) {
         console.error("Error en el controlador de eventos:", error);
@@ -50,15 +53,12 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => { //no funciona
-    const eventId = req.params.id;
-        const result = await svc.deleteEvent(eventId);
-        if (result === 0) {
-            return res.status(404).json({ error: "Event not found or does not belong to authenticated user" });
-        }
-        res.status(200).json({ message: "Event deleted successfully" });
-    }
-);
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    const returnArray = await svc.deleteEventAsync(id);
+    res.status(returnArray[1]).json(returnArray[0]);
+  });
+
 
 
 

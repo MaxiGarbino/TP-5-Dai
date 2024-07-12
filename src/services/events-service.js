@@ -1,17 +1,5 @@
 import EventRepository from '../repositories/event-repository.js';
 export default class EventService{
-    // getAllAsync = async () => {
-    //     const repo = new EventRepository();
-    //     const arrayEventos= await repo.getAllAsync();
-    //     let resArray
-    //     if(arrayEventos != ''){
-    //         resArray = [arrayEventos, 200];
-    //     }
-    //     else{
-    //         resArray = ["No se encuentran eventos", 404]
-    //     }
-    //     return resArray; 
-    // }
 
     searchAsync = async (params) => {
         const repo = new EventRepository();
@@ -26,10 +14,11 @@ export default class EventService{
         return resArray;
         
     }
+
     getByIdAsync = async (id) => {
         const repo = new EventRepository();
         const arrayEventos = await repo.getByIdAsync(id);
-            if (Array.isArray(arrayEventos) && arrayEventos.length > 0) {
+            if (arrayEventos && Object.keys(arrayEventos).length !== 0) {
             return [arrayEventos, 200];
         } else {
             return ["Evento no encontrado", 404];
@@ -39,8 +28,8 @@ export default class EventService{
     searchEnrollments = async (eventId, params) => {
         const repo = new EventRepository();
             const enrollments = await repo.searchEnrollments(eventId, params);
-            let resArray;
-            if (enrollments.collection.length >= 1) {
+            let resArray;            
+            if (enrollments.collection.length>0) {
             
                 resArray = [enrollments,200];;
             } else {
@@ -50,17 +39,18 @@ export default class EventService{
 
     };
 
-    createAsync = async (body) => {
+    createAsync = async (body,token) => {
         const repo = new EventRepository();
-        let resArray = repo.createAsync(body);
+        let resArray = repo.createAsync(body,token);
         return resArray;
     }
 
-    UpdateAsync =  async (body) =>{
+    UpdateAsync =  async (body,token) =>{
         const repo = new EventRepository();
         let restArray
         if (body.id) {
-            return repo.updateAsync(body.id, body);
+            
+            return repo.updateAsync(body.id, body, token);
         } else {
             resArray = ["Id missing",404];
 
@@ -68,15 +58,12 @@ export default class EventService{
         }
     }
     
-     deleteEvent = async(id)=> {
-        try {
-            const repo = new EventRepository();
-            const result = await repo.deleteEvent(id);
-            return result;
-        } catch (error) {
-            throw error;
-        }
+    deleteEventAsync = async (id) => {
+        const repo = new EventRepository();
+        let Res = await repo.deleteEventAsync(id);
+        return Res;
     }
+
 
     addEnrollmentOfUser = async(id) =>
     {
