@@ -194,10 +194,10 @@ export default class EventLocationRepository {
           resArray = ["Location de evento eliminada correctamente", 200];
             }
           else{
-            resArray = ["Unauthorized", 400];
+            resArray = ["Unauthorized", 401];
         }}
         else{
-            resArray = ["Unauthorized", 400];
+            resArray = ["Unauthorized", 401];
         }
         } catch (error) {
           resArray = ["Location de evento no encontrada", 404];
