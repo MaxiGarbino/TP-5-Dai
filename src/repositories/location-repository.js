@@ -18,9 +18,9 @@ export default class LocationRepository {
     getByIdAsync = async (id) => {
         
         let sql = `select l.id,l.name,p.*,l.latitude,l.longitude from locations l inner join provinces p on l.id_province = l.id WHERE l.id=$1 LIMIT 1`;
-        const values = [id];
+        let values = [id];
         let result = await client.query(sql, values)
-        const Location = result.rows;
+        let Location = result.rows;
         console.log(Location);
         return Location
     }
