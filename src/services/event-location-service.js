@@ -18,18 +18,22 @@ export default class EventLocationService{
         }
         return resArray;
     }
-    getLocationByIdAsync = async (id) =>{
+    createAsync = async (body) => {
         const repo = new EventLocationRepository();
-        const arrayEventLocation= await repo.getLocationByIdAsync(id);
-        let resArray;
-        if (arrayEventLocation != '') {
-            
-            resArray = [arrayEventLocation,200];;
-        } else {
-            resArray = ["Ubicacion no encontrada",404];
-        }
+        let resArray = repo.createAsync(body);
+        return resArray;
+    };
+    putAsync = async (body) => {
+        const repo = new EventLocationRepository();
+        let resArray = repo.putAsync(body);
+        return resArray;
+    };
+    deleteAsync = async (id) =>{
+        const repo = new EventLocationRepository();
+        const resArray= await repo.deleteAsync(id);
         return resArray;
     }
+    
 
        
 }
