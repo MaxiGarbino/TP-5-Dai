@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import EventService from '../services/events-service.js'
-
+import EventRepositoryverifyToken from '../repositories/event-repository.js'
 const router = Router();
 const svc = new EventService();
 

@@ -240,8 +240,23 @@ export default class EventRepository {
         }
       }
 
+<<<<<<< HEAD
       const result = await client.query(sql, values);
       const enrollments = result.rows;
+=======
+    createAsync = async (body) => {
+        
+        
+        const client = new Client(config);
+        await client.connect();
+        try {
+            const secretKey = "ClaveSecreta3000$";
+        let validacionToken = token; 
+        let payloadOriginal = null;
+        payloadOriginal = await jwt.verify(validacionToken,secretKey);
+        if(payloadOriginal != null){
+            const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
+>>>>>>> aabdf4186c41fd0b51df9a0fbb7b2c9897254646
 
       const collection = enrollments.map((enrollment) => ({
         id: enrollment.id,
@@ -297,9 +312,16 @@ export default class EventRepository {
         return ["Name and description must have at least 3 characters", 400];
       }
 
+<<<<<<< HEAD
       if (max_assistance <= 0) {
         return ["max_assistance must be greater than 0", 400];
       }
+=======
+            const sql1 = `SELECT id FROM public.events ORDER BY id DESC limit 1;`;
+            const result1 = await client.query(sql1);
+            let obj = result1.rows[0];
+            const id = obj.id + 1;
+>>>>>>> aabdf4186c41fd0b51df9a0fbb7b2c9897254646
 
       const max_capacity = await this.getMaxCapacity(id_event_location);
 
@@ -341,12 +363,25 @@ export default class EventRepository {
       ];
       const result = await client.query(query, values);
 
+<<<<<<< HEAD
       return ["created", 201];
     } catch (error) {
       console.error("Error creating event:", error);
       return [error.message, 500];
     } finally {
       await client.end();
+=======
+            return ["created", 201];
+        }else{
+            return ["Unauthorized",401]
+        }
+        } catch (error) {
+            console.error("Error creating event:", error);
+            return [error.message, 500];
+        } finally {
+            await client.end();
+        }
+>>>>>>> aabdf4186c41fd0b51df9a0fbb7b2c9897254646
     }
   };
 
@@ -377,6 +412,7 @@ export default class EventRepository {
     }
   };
 
+<<<<<<< HEAD
   updateAsync = async (id, body) => {
     const client = new Client(config);
     await client.connect();
@@ -393,6 +429,18 @@ export default class EventRepository {
         max_assistance,
         id_creator_user,
       } = body;
+=======
+    updateAsync = async (id, body) => {
+        const client = new Client(config);
+        await client.connect();
+        try {
+            const secretKey = "ClaveSecreta3000$";
+            let validacionToken = token; 
+            let payloadOriginal = null;
+            payloadOriginal = await jwt.verify(validacionToken,secretKey);
+            if(payloadOriginal != null){
+            const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = body;
+>>>>>>> aabdf4186c41fd0b51df9a0fbb7b2c9897254646
 
       if (!name || !description || name.length < 3 || description.length < 3) {
         return ["Name and description must have at least 3 characters", 400];
@@ -451,12 +499,25 @@ export default class EventRepository {
         throw new Error(`Event with ID ${id} not found`);
       }
 
+<<<<<<< HEAD
       return ["updated", 200];
     } catch (error) {
       console.error("Error updating event:", error);
       return [error.message, 400];
     } finally {
       await client.end();
+=======
+            return ["updated", 200];
+        }else{
+            return ["Unauthorized", 401];
+        }
+        } catch (error) {
+            console.error("Error updating event:", error);
+            return [error.message, 400];
+        } finally {
+            await client.end();
+        }
+>>>>>>> aabdf4186c41fd0b51df9a0fbb7b2c9897254646
     }
   };
 
@@ -464,6 +525,7 @@ export default class EventRepository {
     const client = new Client(config);
     await client.connect();
 
+<<<<<<< HEAD
     try {
       const deleteQuery = `
                 DELETE FROM events
@@ -485,6 +547,40 @@ export default class EventRepository {
       };
     } finally {
       await client.end();
+=======
+        try {
+            const secretKey = "ClaveSecreta3000$";
+            let validacionToken = token; 
+            let payloadOriginal = null;
+            payloadOriginal = await jwt.verify(validacionToken,secretKey);
+            if(payloadOriginal != null){
+                let sql2 = `SELECT * from events WHERE id=$1`;
+                const values = [id];
+                let result1 = await client.query(sql2, values);
+                
+            const deleteQuery = `
+                DELETE FROM events
+                WHERE id = $1`;
+
+            const deleteValues = [id];
+
+            if(Object.keys(result1).length !== 0){
+            const result = await client.query(deleteQuery, deleteValues);
+            return { message: "Event deleted successfully", status: 200 };
+        }else {throw { message: `Event with ID ${id} not found`, status: 404 };}
+
+           
+        }else{
+            
+            return ["Unauthorized", 401];
+        }
+        } catch (error) {
+            console.error("Error deleting event:", error);
+            throw { message: error.message || "Internal server error", status: error.status || 500 };
+        } finally {
+            await client.end();
+        }
+>>>>>>> aabdf4186c41fd0b51df9a0fbb7b2c9897254646
     }
   };
 

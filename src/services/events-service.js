@@ -24,26 +24,23 @@ export default class EventService{
             resArray = ["No se encuentran eventos", 404];
         }
         return resArray;
+        
     }
-
-    getByIdAsync = async (id) =>{
+    getByIdAsync = async (id) => {
         const repo = new EventRepository();
-        const arrayEventos= await repo.getByIdAsync(id);
-        let resArray;
-        if (arrayEventos != '') {
-            
-            resArray = [arrayEventos,200];;
+        const arrayEventos = await repo.getByIdAsync(id);
+            if (Array.isArray(arrayEventos) && arrayEventos.length > 0) {
+            return [arrayEventos, 200];
         } else {
-            resArray = ["Evento no encontrado",404];
+            return ["Evento no encontrado", 404];
         }
-        return resArray;
     }
 
     searchEnrollments = async (eventId, params) => {
         const repo = new EventRepository();
             const enrollments = await repo.searchEnrollments(eventId, params);
             let resArray;
-            if (enrollments != '') {
+            if (enrollments.collection.length >= 1) {
             
                 resArray = [enrollments,200];;
             } else {
@@ -53,7 +50,7 @@ export default class EventService{
 
     };
 
-        createAsync = async (body) => {
+    createAsync = async (body) => {
         const repo = new EventRepository();
         let resArray = repo.createAsync(body);
         return resArray;

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "66065898-c6ed-456c-9948-91cbbb13b3b2",
+		"_postman_id": "4252abd7-adcb-49db-94c3-a1a5326c0440",
 		"name": "TP05",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -56,7 +56,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"name\" : \"Chaco Provincia\",\r\n\"full_name\" : \"Provincia de Chaco\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}\r\n"
+							"raw": "{\r\n\"name\" : \"Chaco Provincia\",\r\n\"full_name\" : \"Provincia de Chaco\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:3000/api/province",
@@ -80,7 +85,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"id\" : 34,\r\n\"name\" : \"Provincia Modificada\",\r\n\"full_name\" : \"Provincia Modificada\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}"
+							"raw": "{\r\n\"id\" : 4,\r\n\"name\" : \"Provincia Modificada\",\r\n\"full_name\" : \"Provincia Modificada\",\r\n\"latitude\" : -24.895086288452148,\r\n\"longitude\" : -59.93218994140625,\r\n\"display_order\" : 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:3000/api/province",
@@ -103,7 +113,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/province/3",
+							"raw": "http://localhost:3000/api/province/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -112,7 +122,7 @@
 							"path": [
 								"api",
 								"province",
-								"3"
+								"4"
 							]
 						}
 					},
@@ -124,12 +134,12 @@
 			"name": "events",
 			"item": [
 				{
-					"name": "4 - Detalle evento",
+					"name": "2 - Todos los eventos",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/{id}",
+							"raw": "http://localhost:3000/api/event/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -138,7 +148,7 @@
 							"path": [
 								"api",
 								"event",
-								"{id}"
+								""
 							]
 						}
 					},
@@ -150,29 +160,54 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "/api/event/?name={texto}&category={texto}&startdate={fecha YYYY-MM-DD}&tag={texto}",
+							"raw": "http://localhost:3000/api/event?name=Art&category=Art&tag=Art&startdate=2024-06-02",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
 							"path": [
 								"api",
-								"event",
-								""
+								"event"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "{texto}"
+									"value": "Art"
 								},
 								{
 									"key": "category",
-									"value": "{texto}"
-								},
-								{
-									"key": "startdate",
-									"value": "{fecha YYYY-MM-DD}"
+									"value": "Art"
 								},
 								{
 									"key": "tag",
-									"value": "{texto}"
+									"value": "Art"
+								},
+								{
+									"key": "startdate",
+									"value": "2024-06-02"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 - Detalle evento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/51",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"51"
 							]
 						}
 					},
@@ -184,7 +219,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/{id}/enrollment?first_name={texto}&last_name={texto}&username={texto}&attended={boolean}&rating={entero}",
+							"raw": "http://localhost:3000/api/event/2/enrollment?first_name=Jane",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -193,29 +228,13 @@
 							"path": [
 								"api",
 								"event",
-								"{id}",
+								"2",
 								"enrollment"
 							],
 							"query": [
 								{
 									"key": "first_name",
-									"value": "{texto}"
-								},
-								{
-									"key": "last_name",
-									"value": "{texto}"
-								},
-								{
-									"key": "username",
-									"value": "{texto}"
-								},
-								{
-									"key": "attended",
-									"value": "{boolean}"
-								},
-								{
-									"key": "rating",
-									"value": "{entero}"
+									"value": "Jane"
 								}
 							]
 						}
@@ -223,13 +242,13 @@
 					"response": []
 				},
 				{
-					"name": "6 - Autenticacion de Usuarios - Login",
+					"name": "8 - Crear evento",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"Maxi@gmail.com\",\r\n    \"password\":\"HolaProfe\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Evento de prueba\",\r\n    \"description\": \"Descripción del evento de prueba\",\r\n    \"id_event_category\": 1,\r\n    \"id_event_location\": 1,\r\n    \"start_date\": \"2024-07-05T10:00:00Z\",\r\n    \"duration_in_minutes\": 120,\r\n    \"price\": 50.00,\r\n    \"enabled_for_enrollment\": true,\r\n    \"max_assistance\": 100,\r\n    \"id_creator_user\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -237,7 +256,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/user/login",
+							"raw": "http://localhost:3000/api/event/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -245,21 +264,21 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"user",
-								"login"
+								"event",
+								""
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "6 - Autenticacion de Usuarios - Register",
+					"name": "8 - Modificar Evento",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"first_name\":\"Maxi\",\r\n    \"last_name\": \"Garbarino\",\r\n    \"username\":\"maxi@gmail.com\",\r\n    \"password\": \"HolaProfe\"\r\n}",
+							"raw": "{\r\n    \"id\":4,\r\n    \"name\": \"Evento de prueba modificado\",\r\n    \"description\": \"Descripción del evento de prueba\",\r\n    \"id_event_category\": 1,\r\n    \"id_event_location\": 1,\r\n    \"start_date\": \"2024-07-05T10:00:00Z\",\r\n    \"duration_in_minutes\": 120,\r\n    \"price\": 50.00,\r\n    \"enabled_for_enrollment\": true,\r\n    \"max_assistance\": 100,\r\n    \"id_creator_user\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -267,7 +286,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/user/register",
+							"raw": "http://localhost:3000/api/event/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -275,8 +294,38 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"user",
-								"register"
+								"event",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8 - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":24,\r\n    \"name\": \"Evento de prueba modificado\",\r\n    \"description\": \"Descripción del evento de prueba\",\r\n    \"id_event_category\": 1,\r\n    \"id_event_location\": 1,\r\n    \"start_date\": \"2024-07-05T10:00:00Z\",\r\n    \"duration_in_minutes\": 120,\r\n    \"price\": 50.00,\r\n    \"enabled_for_enrollment\": true,\r\n    \"max_assistance\": 100,\r\n    \"id_creator_user\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/event/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"4"
 							]
 						}
 					},
@@ -551,6 +600,71 @@
 			]
 		},
 		{
+			"name": "usuarios",
+			"item": [
+				{
+					"name": "6 - Autenticacion de Usuarios - Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"maxi@gmail.com\",\r\n    \"password\":\"HolaProfe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6 - Autenticacion de Usuarios - Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\":\"Maxi\",\r\n    \"last_name\": \"Garbarino\",\r\n    \"username\":\"maxi@gmail.com\",\r\n    \"password\": \"HolaProfe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Locations",
 			"item": [
 				{
@@ -610,7 +724,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/location/province/1",
+							"raw": "http://localhost:3000/api/location/province",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -619,8 +733,7 @@
 							"path": [
 								"api",
 								"location",
-								"province",
-								"1"
+								"province"
 							]
 						}
 					},

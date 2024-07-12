@@ -26,7 +26,7 @@ export class UserRepository {
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(username);
       }
-      if (first_name.lenght < 3 || last_name.length < 3) {
+      if (first_name.length < 3 || last_name.length < 3) {
         return [
           "Nombre o apellido estan vacion o tienen menos de 3 caracteres",
           400,
@@ -45,8 +45,9 @@ export class UserRepository {
             VALUES
                 ($1,$2,$3,$4,$5)`;
             const values = [id, first_name, last_name, username, password];
+            console.log(values)
             const result = await client.query(sql, values);
-            return ["created", 200];
+            return ["created", 201];
           }
         }
       }
