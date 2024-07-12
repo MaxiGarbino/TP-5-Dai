@@ -25,6 +25,13 @@ router.get('/:id/enrollment', async(req, res) => {
     res.status(resArray[1]).send(resArray[0]);
 });
 
+router.post('/:id/enrollment', async(req, res) => {
+    const eventId = req.params.id;
+    console.log(eventId)
+    const resArray = await svc.addEnrollmentOfUser(eventId);
+    res.status(resArray[1]).send(resArray[0]);
+});
+
 
 router.post('', async(req, res) => {
     const body = req.body;

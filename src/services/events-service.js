@@ -81,6 +81,14 @@ export default class EventService{
         }
     }
 
+    addEnrollmentOfUser = async(id) =>
+    {
+        const repo = new EventRepository();
+        const result = await repo.addEnrollmentOfUser(id)
+        return result;
+        
+    }
+
     ratingEnrollment = async(eventId,eventRating,bodyDesc) =>
     {
         const repo = new EventRepository();

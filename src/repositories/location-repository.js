@@ -32,7 +32,9 @@ export default class LocationRepository {
         let resArray;
         try{
             payloadOriginal = await jwt.verify(validacionToken,secretKey);
+            
             if(payloadOriginal != null){
+                console.log(payloadOriginal)
                 let sql = `select el.* from locations l inner join event_locations el on l.id = l.id WHERE l.id=$1`;
                 const values = [id];
                 let result = await client.query(sql, values)
