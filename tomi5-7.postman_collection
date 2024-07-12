@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d437e201-20fd-4e19-a094-f7066db98b39",
-		"name": "TP05 Copy",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "fe593470-577a-49e2-8632-d59a6c9dba0d",
+		"name": "TP05 pelichari",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34258814"
 	},
 	"item": [
 		{
@@ -160,7 +161,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event?name=Concert",
+							"raw": "http://localhost:3000/api/event?name=Art&category=Art&tag=Art&startdate=2024-06-02",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -173,7 +174,19 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "Concert"
+									"value": "Art"
+								},
+								{
+									"key": "category",
+									"value": "Art"
+								},
+								{
+									"key": "tag",
+									"value": "Art"
+								},
+								{
+									"key": "startdate",
+									"value": "2024-06-02"
 								}
 							]
 						}
@@ -207,7 +220,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/event/1/enrollment?attended=True&username=jsmith",
+							"raw": "http://localhost:3000/api/event/1/enrollment?username=jdoe&attended=false",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -221,12 +234,12 @@
 							],
 							"query": [
 								{
-									"key": "attended",
-									"value": "True"
+									"key": "username",
+									"value": "jdoe"
 								},
 								{
-									"key": "username",
-									"value": "jsmith"
+									"key": "attended",
+									"value": "false"
 								}
 							]
 						}
