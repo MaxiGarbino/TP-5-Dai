@@ -247,7 +247,7 @@ export default class EventRepository {
                 return ["Price and duration_in_minutes must be greater than or equal to 0", 400];
             }
 
-            const sql1 = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
+            const sql1 = `SELECT id FROM public.events ORDER BY id DESC limit 1;`;
             const result1 = await client.query(sql1);
             let obj = result1.rows[0];
             const id = obj.id + 1;

@@ -22,60 +22,91 @@ export default class ProvinceRepository {
   };
   createAsync = async (body) => {
     try {
-      let nombre = body.name;
-      let full_nombre = body.full_name;
-      let latitud = parseInt(body.latitude);
-      let longitud = parseInt(body.longitude);
-      let display_orden = parseInt(body.display_order);
-      const sql = `
+        const { name, full_name, latitude, longitude, display_order } = body;
+
+        if (!name || name.length < 3) {
+            return ["El campo 'name' está vacío o tiene menos de 3 letras.", 400];
+        }
+
+        const lat = parseFloat(latitude);
+        const lon = parseFloat(longitude);
+
+        if (isNaN(lat) || isNaN(lon)) {
+            return ["Los campos 'latitude' y 'longitude' deben ser números válidos.", 400];
+        }
+
+        if (lat < -90 || lat > 90) {
+            return ["El campo 'latitude' debe estar entre -90 y 90.", 400];
+        }
+
+        if (lon < -180 || lon > 180) {
+            return ["El campo 'longitude' debe estar entre -180 y 180.", 400];
+        }
+
+        if (isNaN(parseInt(display_order))) {
+            return ["El campo 'display_order' debe ser un número entero válido.", 400];
+        }
+
+        const display_orden = parseInt(display_order);
+
+        const sql1 = `SELECT id FROM public.provinces ORDER BY id DESC LIMIT 1;`;
+        const result1 = await client.query(sql1);
+        const id = result1.rows[0] ? result1.rows[0].id + 1 : 1;
+
+        const sql = `
             INSERT INTO provinces
-                (name, full_name, latitude, longitude, display_order)
+                (name, full_name, latitude, longitude, display_order, id)
             VALUES
-                ($1,$2,$3,$4,$5)`;
-      const values = [nombre, full_nombre, latitud, longitud, display_orden];
-      const result = await client.query(sql, values);
-      return ["created", 200];
+                ($1, $2, $3, $4, $5, $6)`;
+        const values = [name, full_name, lat, lon, display_orden, id];
+
+        await client.query(sql, values);
+
+        return ["Provincia creada con éxito", 201];
+
     } catch (error) {
-      return [error, 404];
+        console.error("Error en la creación de la provincia:", error);
+        return ["Error interno del servidor", 500];
     }
-  };
-  putAsync = async (body) => {
-    try {
-      const sql1 = `SELECT id from provinces WHERE id=$1`;
-      const valuesID = [parseInt(body.id)];
-      const resultID = await client.query(sql1, valuesID);
+};
 
-      if (resultID.rows.length === 0) {
-        return ["Provincia no encontrada", 404];
-      }
+  // putAsync = async (body) => {
+  //   try {
+  //     const sql1 = `SELECT id from provinces WHERE id=$1`;
+  //     const valuesID = [parseInt(body.id)];
+  //     const resultID = await client.query(sql1, valuesID);
 
-      const sql2 = `UPDATE provinces
-                          SET name = $1,
-                              full_name = $2,
-                              latitude = $3,
-                              longitude = $4,
-                              display_order = $5
-                          WHERE id = $6`;
+  //     if (resultID.rows.length === 0) {
+  //       return ["Provincia no encontrada", 404];
+  //     }
 
-      const values = [
-        body.name,
-        body.full_name,
-        body.latitude,
-        body.longitude,
-        body.display_order,
-        body.id,
-      ];
-      const result = await client.query(sql2, values);
+  //     const sql2 = `UPDATE provinces
+  //                         SET name = $1,
+  //                             full_name = $2,
+  //                             latitude = $3,
+  //                             longitude = $4,
+  //                             display_order = $5
+  //                         WHERE id = $6`;
 
-      if (body.name === "" || body.name.length <= 3) {
-        return ["No cumple con las reglas de negocio", 400];
-      }
+  //     const values = [
+  //       body.name,
+  //       body.full_name,
+  //       body.latitude,
+  //       body.longitude,
+  //       body.display_order,
+  //       body.id,
+  //     ];
+  //     const result = await client.query(sql2, values);
 
-      return ["Update", 200];
-    } catch (error) {
-      return [error.message, 400];
-    }
-  };
+  //     if (body.name === "" || body.name.length <= 3) {
+  //       return ["No cumple con las reglas de negocio", 400];
+  //     }
+
+  //     return ["Update", 200];
+  //   } catch (error) {
+  //     return [error.message, 400];
+  //   }
+  // };
 
   /*let resArray = "";
         const createPutAsync = body.id;
