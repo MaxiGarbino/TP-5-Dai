@@ -14,8 +14,8 @@ export default class EventLocationRepository {
         let payloadOriginal = null;
         payloadOriginal = await jwt.verify(validacionToken,secretKey);
         if(payloadOriginal != null){
-        let sql = `SELECT el.id, l.* , el.name, el.full_address, el.max_capacity, el.latitude, el.longitude, u.*
-        FROM public.event_locations el inner join locations l on l.id = el.id_location inner join users u on u.id = el.id_creator_user`;
+        let sql = `SELECT el.id, l.* , el.name, el.full_address, el.max_capacity, el.latitude, el.longitude, el.id_creator_user
+        FROM public.event_locations el inner join locations l on l.id = el.id_location`;
         let result = await client.query(sql)
         const eventLocation = result.rows;
         return [eventLocation,200];
