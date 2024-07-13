@@ -134,22 +134,22 @@ export default class EventRepository {
                 ec.display_order AS event_category_display_order
             FROM 
                 events AS e
-            INNER JOIN 
+            left JOIN 
                 event_locations AS el ON e.id_event_location = el.id
-            INNER JOIN 
+            left JOIN 
                 locations AS l ON el.id_location = l.id
-            INNER JOIN 
+            left JOIN 
                 provinces AS p ON l.id_province = p.id
-            INNER JOIN 
+            left JOIN 
                 users AS u ON e.id_creator_user = u.id
-            INNER JOIN 
+            left JOIN 
                 event_categories AS ec ON e.id_event_category = ec.id
             WHERE 
                 e.id = $1`;
 
-            const values = [id];
-            const result = await client.query(sql, values);
-            const eventData = result.rows[0];
+        const values = [id];
+        const result = await client.query(sql, values);
+        const eventData = result.rows[0];
 
             if (!eventData) {
                 return null;

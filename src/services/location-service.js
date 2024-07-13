@@ -15,7 +15,7 @@ export default class LocationService{
 
     getByIdAsync = async (id) =>{
         const repo = new LocationRepository();
-        const arrayLocation= await repo.getByIdAsync(id);
+        let arrayLocation= await repo.getByIdAsync(id);
         let resArray;
         if (arrayLocation != '') {
             
