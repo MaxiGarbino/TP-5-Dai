@@ -80,6 +80,15 @@ router.patch('/:id/enrollment/:entero', async(req, res) => {
     const resArray = await svc.ratingEnrollment(eventId,eventRating,bodyDesc);
     res.status(resArray[1]).send(resArray[0]);
 })
+
+router.delete('/:id/enrollment/', async(req,res) => {
+
+    const eventId = req.params.id;
+    console.log(eventId)
+    const resArray = await svc.deleteEnrollmentOfUser(eventId);
+    res.status(resArray[1]).send(resArray[0]);
+
+} )
 // router.get('/search', async (req, res) => {
 //     const params = req.query;c
 //     const resArray = await svc.searchAsync(params);
