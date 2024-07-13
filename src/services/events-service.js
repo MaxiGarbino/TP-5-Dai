@@ -15,18 +15,8 @@ export default class EventService {
       resArray = ["No se encuentran eventos", 404];
     }
     return resArray;
-
-<<<<<<< HEAD
   }
 
-  getByIdAsync = async (id) => {
-    const repo = new EventRepository();
-    const arrayEventos = await repo.getByIdAsync(id);
-    if (arrayEventos && Object.keys(arrayEventos).length !== 0) {
-      return [arrayEventos, 200];
-    } else {
-      return ["Evento no encontrado", 404];
-=======
     getByIdAsync = async (id) => {
         const repo = new EventRepository();
         const arrayEventos = await repo.getByIdAsync(id);
@@ -36,9 +26,8 @@ export default class EventService {
         } else {
             return ["Evento no encontrado", 404];
         }
->>>>>>> 8d5b9f8224e5773570a3c523700e99fd2c481bd7
     }
-  }
+  
 
   searchEnrollments = async (eventId, params) => {
     const repo = new EventRepository();
