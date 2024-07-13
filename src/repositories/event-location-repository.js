@@ -144,7 +144,12 @@ export default class EventLocationRepository {
                             SET id_location = $2, name = $3,full_address = $4, max_capacity = $5, latitude = $6, longitude= $7 
                             WHERE id = $1`;
                             const values = [id, id_location,name,full_address,max_capacity,latitude,longitude];
+                            try{
                             const result = await client.query(sql, values);
+                            }catch(e){
+                                console.log(e);
+                                return ["El id_location es inexistente.",400]
+                            }
                             return ["update", 200]; 
                         }
                         return ["El id_location es inexistente.",400]
