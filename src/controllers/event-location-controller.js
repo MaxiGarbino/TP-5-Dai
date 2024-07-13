@@ -25,7 +25,9 @@ router.post('', async(req, res) => {
 });
 router.put('', async(req, res) => {
     const body = req.body;
-    const resArray = await svc.putAsync(body);
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
+
+    const resArray = await svc.putAsync(body,token);
     res.status(resArray[1]).send(resArray[0]);
 });
 router.delete('/:id', async (req, res) => {

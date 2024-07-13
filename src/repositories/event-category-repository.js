@@ -21,7 +21,17 @@ export default class EventCategoryService {
   };
   createAsync = async (body) => {
     try {
-      const sql1 = `SELECT id FROM public.users ORDER BY id DESC limit 1;`;
+
+
+      
+
+      if (body.name === "" || body.name.length <= 3) {
+        return [
+          "El nombre (name) está vacío o tiene menos de tres (3) letras.",
+          400,
+        ]}
+
+      const sql1 = `SELECT id FROM public.event_categories ORDER BY id DESC limit 1;`;
       let result1 = await client.query(sql1);
       let obj = result1.rows[0];
       let id = obj.id + 1;
@@ -79,7 +89,7 @@ export default class EventCategoryService {
     try {
       
       const sql5 = `SELECT id from event_categories WHERE id=$1`;
-      const valuesID = [parseInt(body.id)];
+      const valuesID = [parseInt(id)];
       const resultID = await client.query(sql5, valuesID);
 
       if (resultID.rows.length === 0) {

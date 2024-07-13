@@ -21,6 +21,7 @@ export default class EventService{
     getByIdAsync = async (id) => {
         const repo = new EventRepository();
         const arrayEventos = await repo.getByIdAsync(id);
+        console.log(arrayEventos)
             if (arrayEventos && Object.keys(arrayEventos).length !== 0) {
             return [arrayEventos, 200];
         } else {

@@ -23,9 +23,9 @@ export default class EventLocationService{
         let resArray = repo.createAsync(body);
         return resArray;
     };
-    putAsync = async (body) => {
+    putAsync = async (body,token) => {
         const repo = new EventLocationRepository();
-        let resArray = repo.putAsync(body);
+        let resArray = repo.putAsync(body,token);
         return resArray;
     };
     deleteAsync = async (id) =>{
