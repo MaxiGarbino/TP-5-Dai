@@ -23,7 +23,6 @@ export default class EventCategoryService {
     try {
 
 
-      
 
       if (body.name === "" || body.name.length <= 3) {
         return [
@@ -37,7 +36,7 @@ export default class EventCategoryService {
       let id = obj.id + 1;
       let nombre = body.name;
       let display_order = body.display_order;
-      if(nombre.length <3){
+
 
       
       const sql = `
@@ -48,9 +47,8 @@ export default class EventCategoryService {
       const values = [id, nombre, parseInt(display_order)];
       const result = await client.query(sql, values);
       return ["created", 200];
-    }else{
-      return ["El nombre (name) está vacío o tiene menos de tres (3) letras.", 400];
-    }
+
+    
     } catch (error) {
       return [error, 404];
     }

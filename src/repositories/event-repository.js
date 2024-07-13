@@ -436,10 +436,22 @@ export default class EventRepository {
                 id_creator_user,
             } = body;
 
-            if (payloadOriginal.id !== id_creator_user) {
-                return ["Unauthorized", 401];
-            }
+        const checkEventQuery = `
+            SELECT id_creator_user
+            FROM events
+            WHERE id = $1`;
+        const checkEventValues = [id];
+        const eventResult = await client.query(checkEventQuery, checkEventValues);
 
+        if (eventResult.rows.length === 0) {
+            return [`Event with ID ${id} not found`, 404];
+        }
+
+        const id_creator_user1 = eventResult.rows[0].id_creator_user;
+
+        if (payloadOriginal.id !== id_creator_user1) {
+            return ["Unauthorized", 401];
+        }
             if (!name || !description || name.length < 3 || description.length < 3) {
                 return ["Name and description must have at least 3 characters", 400];
             }
