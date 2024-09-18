@@ -11,7 +11,7 @@ import UserRouter from './src/controllers/user-controller.js';
 import EventCategoryRouter from './src/controllers/event-category-router.js';
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use(cors());
 app.use(express.json());
