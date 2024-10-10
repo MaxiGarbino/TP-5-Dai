@@ -91,7 +91,7 @@ export class UserRepository {
         };
         token = jwt.sign(payload, secretKey, options);
 
-        return [{ success: true, message: "", token: token }, 200];
+        return [{ result: result.rows[0], message: "", token: token }, 200];
       } else {
         return [
           { success: false, message: "Usuario o clave inválida", token: "" },
