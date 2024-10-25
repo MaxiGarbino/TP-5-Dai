@@ -54,22 +54,25 @@ export default class EventRepository {
     }
 
 
-    addEnrollmentOfUser = async (id) => {
+    addEnrollmentOfUser = async (id, token) => {
         const client = new Client(config);
         await client.connect();
         const secretKey = "ClaveSecreta3000$";
         let validacionToken = token;
         let payloadOriginal = null;
         let resArray;
+    
         try {
             payloadOriginal = await jwt.verify(validacionToken, secretKey);
             if (payloadOriginal != null) {
-                let sql1 = `Select max_assistance from events where id = $1`;
-                let sql2 = `Select count(id_user) as assitance from event_enrollments where id_event = $1`;
-                let sql3 = `Select cast(Extract (epoch from current_timestamp) as integer) as datenum;`;
-                let sql4 = `Select cast(Extract (epoch from start_date )as integer) as datenum from events where id = $1;`;
-                let sql5 = `Select enabled_for_enrollment from events where id = $1 `;
-                let sql6 = `select id_event from event_enrollments where id_event = $1`;
+                let sql1 = `SELECT max_assistance FROM events WHERE id = $1`;
+                let sql2 = `SELECT COUNT(id_user) as assistance FROM event_enrollments WHERE id_event = $1`;
+                // Cambiamos para dividir por 1000 y reducir el tamaño del valor epoch
+                let sql3 = `SELECT CAST(EXTRACT(epoch FROM current_timestamp) / 1000 AS integer) AS datenum;`;
+                let sql4 = `SELECT CAST(EXTRACT(epoch FROM start_date) / 1000 AS integer) AS datenum FROM events WHERE id = $1;`;
+                let sql5 = `SELECT enabled_for_enrollment FROM events WHERE id = $1`;
+                let sql6 = `SELECT id_event FROM event_enrollments WHERE id_event = $1`;
+    
                 const values1 = [id];
                 const result1 = await client.query(sql1, values1);
                 const result2 = await client.query(sql2, values1);
@@ -77,38 +80,43 @@ export default class EventRepository {
                 const result4 = await client.query(sql4, values1);
                 const result5 = await client.query(sql5, values1);
                 const result6 = await client.query(sql6, values1);
-                console.log("de aqui comienza")
-                console.log(result1.rows[0].max_assistance - result2.rows[0].assitance);
+    
+                console.log("Comprobando condiciones:");
+                console.log(result1.rows[0].max_assistance - result2.rows[0].assistance);
                 console.log(result3.rows[0].datenum - result4.rows[0].datenum);
                 console.log(result5.rows[0].enabled_for_enrollment);
                 console.log(result6);
-                console.log(payloadOriginal);
-
+                console.log(payloadOriginal.id);
+    
                 if (
-                    result1.rows[0].max_assistance - result2.rows[0].assitance >= 0 &&
+                    result1.rows[0].max_assistance - result2.rows[0].assistance >= 0 &&
                     result3.rows[0].datenum - result4.rows[0].datenum <= 0 &&
                     result5.rows[0].enabled_for_enrollment &&
-                    result6.rowCount == 0
+                    result6.rowCount === 0
                 ) {
-                    let sql8 = `INSERT INTO event_enrollments (id_event,id_user,description,registration_date_time,attended,observations,rating) values  ($1, $2, 'Registered for ' || (SELECT name FROM events WHERE events.id = $1), NOW()::timestamp, false, '', 0)`;
+                    let sql8 = `
+                        INSERT INTO event_enrollments 
+                        (id_event, id_user, description, registration_date_time, attended, observations, rating) 
+                        VALUES ($1, $2, 'Registered for ' || (SELECT name FROM events WHERE events.id = $1), NOW()::timestamp, false, '', 0)
+                    `;
                     const values6 = [id, payloadOriginal.id];
-                    const result8 = await client.query(sql8, values6);
+                    await client.query(sql8, values6);
                     resArray = ["Created", 201];
                 } else {
                     resArray = ["Bad Request", 400];
                 }
             } else {
-                console.log(e);
                 resArray = ["Unauthorized", 401];
             }
         } catch (error) {
             resArray = ["Not Found", 404];
-            console.log(error);
+            console.log("Error:", error);
         } finally {
             await client.end();
         }
         return resArray;
-    }
+    };
+    
 
     getByIdAsync = async (id) => {
         const client = new Client(config);

@@ -27,8 +27,10 @@ router.get('/:id/enrollment', async(req, res) => {
 
 router.post('/:id/enrollment', async(req, res) => {
     const eventId = req.params.id;
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; 
+
     console.log(eventId)
-    const resArray = await svc.addEnrollmentOfUser(eventId);
+    const resArray = await svc.addEnrollmentOfUser(eventId,token);
     res.status(resArray[1]).send(resArray[0]);
 });
 
